@@ -22,7 +22,7 @@ public class MasterRenderer {
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
 
-    private float fov;
+    private Camera camera;
 
     private Matrix4f projectionMatrix;
     private StaticShader shader;
@@ -35,9 +35,9 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
 
-    public MasterRenderer(String shaderPath, float fov) {
-        this.fov = fov;
+    public MasterRenderer(String shaderPath, Camera camera) {
         shader = new StaticShader(shaderPath);
+        this.camera = camera;
         terrainShader = new TerrainShader(shaderPath);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
@@ -72,7 +72,7 @@ public class MasterRenderer {
         if (batch != null) {
             batch.add(entity);
         } else {
-            List<Entity> newBatch = new ArrayList<Entity>();
+            List<Entity> newBatch = new ArrayList<>();
             newBatch.add(entity);
             entities.put(entityModel, newBatch);
         }
@@ -91,7 +91,7 @@ public class MasterRenderer {
 
     private void createProjectionMatrix() {
         float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(fov / 2f))) * aspectRatio);
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(camera.getFov() / 2f))) * aspectRatio);
         float x_scale = y_scale / aspectRatio;
         float frustum_length = FAR_PLANE - NEAR_PLANE;
 
@@ -102,13 +102,5 @@ public class MasterRenderer {
         projectionMatrix.m23 = -1;
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
         projectionMatrix.m33 = 0;
-    }
-
-    public float getFov() {
-        return fov;
-    }
-
-    public void setFov(float fov) {
-        this.fov = fov;
     }
 }

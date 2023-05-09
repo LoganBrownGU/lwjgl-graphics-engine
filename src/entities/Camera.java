@@ -7,6 +7,7 @@ public class Camera {
 	
 	private Vector3f position;
 	private Vector3f rotation;
+	private float fov;
 	
 	public void move(){
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
@@ -26,6 +27,12 @@ public class Camera {
 		}
 	}
 
+	public Camera(Vector3f position, Vector3f rotation, float fov) {
+		this.position = position;
+		this.rotation = rotation;
+		this.fov = fov;
+	}
+
 	public Vector3f getPosition() {
 		return position;
 	}
@@ -42,8 +49,11 @@ public class Camera {
 		this.rotation = rotation;
 	}
 
-	public Camera(Vector3f position, Vector3f rotation) {
-		this.position = position;
-		this.rotation = rotation;
+	public float getFov() {
+		return fov;
+	}
+
+	public void setFov(float fov) {
+		this.fov = fov;
 	}
 }

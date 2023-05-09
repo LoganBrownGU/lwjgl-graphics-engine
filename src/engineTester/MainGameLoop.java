@@ -43,8 +43,8 @@ public class MainGameLoop {
 		Terrain terrain = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("assets/grass.png")));
 		Terrain terrain2 = new Terrain(1,0,loader,new ModelTexture(loader.loadTexture("assets/grass.png")));
 		
-		Camera camera = new Camera(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0));
-		MasterRenderer renderer = new MasterRenderer("assets/shaders", 70);
+		Camera camera = new Camera(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0), 70);
+		MasterRenderer renderer = new MasterRenderer("assets/shaders", camera);
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
