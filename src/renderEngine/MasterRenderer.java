@@ -19,13 +19,12 @@ import entities.Entity;
 import entities.Light;
 
 public class MasterRenderer {
-
-    private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
 
-    private Matrix4f projectionMatrix;
+    private float fov;
 
+    private Matrix4f projectionMatrix;
     private StaticShader shader;
     private EntityRenderer renderer;
 
@@ -36,7 +35,8 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
 
-    public MasterRenderer(String shaderPath) {
+    public MasterRenderer(String shaderPath, float fov) {
+        this.fov = fov;
         shader = new StaticShader(shaderPath);
         terrainShader = new TerrainShader(shaderPath);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -91,7 +91,7 @@ public class MasterRenderer {
 
     private void createProjectionMatrix() {
         float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(fov / 2f))) * aspectRatio);
         float x_scale = y_scale / aspectRatio;
         float frustum_length = FAR_PLANE - NEAR_PLANE;
 
@@ -104,5 +104,11 @@ public class MasterRenderer {
         projectionMatrix.m33 = 0;
     }
 
+    public float getFov() {
+        return fov;
+    }
 
+    public void setFov(float fov) {
+        this.fov = fov;
+    }
 }

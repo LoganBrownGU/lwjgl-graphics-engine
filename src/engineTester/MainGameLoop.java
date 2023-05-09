@@ -32,7 +32,7 @@ public class MainGameLoop {
 		
 		TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("assets/tree.png")));
 		
-		List<Entity> entities = new ArrayList<Entity>();
+		List<Entity> entities = new ArrayList<>();
 		Random random = new Random();
 		for(int i=0;i<500;i++){
 			entities.add(new Entity(staticModel, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,3));
@@ -44,7 +44,7 @@ public class MainGameLoop {
 		Terrain terrain2 = new Terrain(1,0,loader,new ModelTexture(loader.loadTexture("assets/grass.png")));
 		
 		Camera camera = new Camera(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0));
-		MasterRenderer renderer = new MasterRenderer("assets/shaders");
+		MasterRenderer renderer = new MasterRenderer("assets/shaders", 70);
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
