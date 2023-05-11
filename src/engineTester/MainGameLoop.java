@@ -8,6 +8,7 @@ import models.RawModel;
 import models.TexturedModel;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 
 import renderEngine.DisplayManager;
@@ -24,7 +25,7 @@ public class MainGameLoop {
 
 	public static void main(String[] args) {
 
-		DisplayManager.createDisplay();
+		DisplayManager.createDisplay("test", 1920, 1080, true, false);
 		Loader loader = new Loader();
 		
 		

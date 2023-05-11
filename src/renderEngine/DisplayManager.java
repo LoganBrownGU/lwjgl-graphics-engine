@@ -11,29 +11,38 @@ public class DisplayManager {
 	
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
-	private static final int FPS_CAP = 120;
+	public static final int FPS_CAP = 120;
+
+	private static boolean vsyncEnabled = false;
 	
-	public static void createDisplay(){		
+	public static void createDisplay(String title, int width, int height, boolean vsync, boolean fullscreen){
+		vsyncEnabled = vsync;
 		ContextAttribs attribs = new ContextAttribs(3,2)
 		.withForwardCompatible(true)
 		.withProfileCore(true);
 		
 		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
+			if (!fullscreen) Display.setDisplayMode(new DisplayMode(width, height));
+			else Display.setFullscreen(true);
+
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Our First Display!");
+			Display.setTitle(title);
+			Display.setVSyncEnabled(vsync);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 		
-		GL11.glViewport(0,0, WIDTH, HEIGHT);
+		GL11.glViewport(0,0, width, height);
 	}
 	
 	public static void updateDisplay(){
 		
-		Display.sync(FPS_CAP);
+		if (!vsyncEnabled) Display.sync(FPS_CAP);
+
 		Display.update();
-		
+
+		if (Display.isCloseRequested())
+			Display.destroy();
 	}
 	
 	public static void closeDisplay(){

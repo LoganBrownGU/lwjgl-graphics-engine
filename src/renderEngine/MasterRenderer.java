@@ -32,8 +32,8 @@ public class MasterRenderer {
     private TerrainShader terrainShader;
 
 
-    private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
-    private List<Terrain> terrains = new ArrayList<Terrain>();
+    private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
+    private List<Terrain> terrains = new ArrayList<>();
 
     public MasterRenderer(String shaderPath, Camera camera) {
         shader = new StaticShader(shaderPath);
@@ -47,8 +47,8 @@ public class MasterRenderer {
     }
 
     public void render(Light sun, Camera camera) {
-        prepare();
         shader.start();
+        prepare();
         shader.loadLight(sun);
         shader.loadViewMatrix(camera);
         renderer.render(entities);

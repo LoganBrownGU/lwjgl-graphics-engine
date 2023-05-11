@@ -20,7 +20,7 @@ public class OBJLoader {
 			fr = new FileReader(fPath);
 		} catch (FileNotFoundException e) {
 			System.err.println("Couldn't load " + fPath);
-			e.printStackTrace();
+			return null;
 		}
 		BufferedReader reader = new BufferedReader(fr);
 		String line;
