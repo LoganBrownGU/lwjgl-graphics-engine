@@ -1,6 +1,7 @@
 package renderEngine;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -26,6 +27,7 @@ public class DisplayManager {
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle(title);
 			Display.setVSyncEnabled(vsync);
+			Mouse.setGrabbed(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

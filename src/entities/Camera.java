@@ -36,7 +36,7 @@ public class Camera {
             Vector3f.add(position, direction, position);
         }
 
-        if (Mouse.isButtonDown(2)) {
+        if (Mouse.isButtonDown(2) || Mouse.isButtonDown(1)) {
             this.rotation.y += (float) Mouse.getDX() / 10;
             this.rotation.x -= (float) Mouse.getDY() / 10;
         }

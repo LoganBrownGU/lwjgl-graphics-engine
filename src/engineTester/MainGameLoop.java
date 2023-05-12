@@ -30,8 +30,9 @@ public class MainGameLoop {
 
 
         RawModel model = OBJLoader.loadObjModel("assets/tree.obj", loader);
-
-        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("assets/tree.png")));
+        ModelTexture modelTexture = new ModelTexture(loader.loadTexture("assets/tree.png"));
+        modelTexture.setTransparent(true);
+        TexturedModel staticModel = new TexturedModel(model, modelTexture);
 
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
