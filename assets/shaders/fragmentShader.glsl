@@ -4,6 +4,7 @@ in vec2 pass_textureCoordinates;
 in vec3 surfaceNormal;
 in vec3 toLightVector;
 in vec3 toCameraVector;
+in float visibility;
 
 out vec4 out_Color;
 
@@ -11,8 +12,10 @@ uniform sampler2D modelTexture;
 uniform vec3 lightColour;
 uniform float shineDamper;
 uniform float reflectivity;
-uniform float min_brightness = 0.5;
-uniform int cel_num = 5;
+uniform vec3 skyColour;
+
+const float min_brightness = 0.5;
+const int cel_num = 5;
 
 void main(void){
 
@@ -40,5 +43,5 @@ void main(void){
     out_Color = round(out_Color);
     out_Color /= cel_num;
 
-    //out_Color = max(out_Color, min_brightness);
+    out_Color = mix(vec4(skyColour, 1), out_Color, visibility);
 }

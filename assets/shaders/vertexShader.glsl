@@ -8,20 +8,30 @@ out vec2 pass_textureCoordinates;
 out vec3 surfaceNormal;
 out vec3 toLightVector;
 out vec3 toCameraVector;
+out float visibility;
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPosition;
+uniform bool fogEnabled;
+
+const float density = 0.007;
+const float gradient = 1.5;
 
 void main(void){
-
     vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
-    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+    vec4 distanceToCamera = viewMatrix * worldPosition;
+
+    gl_Position = projectionMatrix * distanceToCamera;
     pass_textureCoordinates = textureCoordinates;
 
     surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
     toLightVector = lightPosition - worldPosition.xyz;
     toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
 
+    if (fogEnabled) {
+        visibility = exp(-pow(length(distanceToCamera.xyz) * density, gradient));
+        visibility = clamp(visibility, 0, 1);
+    } else visibility = 1;
 }

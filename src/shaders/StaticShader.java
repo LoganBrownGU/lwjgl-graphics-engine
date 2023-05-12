@@ -2,6 +2,7 @@ package shaders;
 
 import org.lwjgl.util.vector.Matrix4f;
 
+import org.lwjgl.util.vector.Vector3f;
 import toolbox.Maths;
 
 import entities.Camera;
@@ -18,6 +19,14 @@ public class StaticShader extends ShaderProgram {
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoordinates");
         super.bindAttribute(2, "normal");
+    }
+
+    public void loadFogEnabled(boolean fogEnabled) {
+        super.loadBoolean(location_fogEnabled, fogEnabled);
+    }
+
+    public void loadSkyColour(Vector3f skyColour) {
+        super.loadVector(location_skyColour, skyColour);
     }
 
     public void loadShineVariables(float damper, float reflectivity) {

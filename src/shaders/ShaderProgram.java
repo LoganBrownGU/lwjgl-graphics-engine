@@ -23,7 +23,9 @@ public abstract class ShaderProgram {
 	protected int location_lightColour;
 	protected int location_shineDamper;
 	protected int location_reflectivity;
-	
+	protected int location_skyColour;
+	protected int location_fogEnabled;
+
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
 	public ShaderProgram(String vertexFile, String fragmentFile){
@@ -46,6 +48,9 @@ public abstract class ShaderProgram {
 		location_lightColour = getUniformLocation("lightColour");
 		location_shineDamper = getUniformLocation("shineDamper");
 		location_reflectivity = getUniformLocation("reflectivity");
+		location_reflectivity = getUniformLocation("reflectivity");
+		location_skyColour = getUniformLocation("skyColour");
+		location_fogEnabled = getUniformLocation("fogEnabled");
 	}
 	
 	protected int getUniformLocation(String uniformName){

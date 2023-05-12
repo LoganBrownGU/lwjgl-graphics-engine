@@ -47,6 +47,7 @@ public class MainGameLoop {
 
         Camera camera = new Camera(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/shaders", camera);
+        renderer.disableFog();
 
         while (!Display.isCloseRequested()) {
             camera.move();

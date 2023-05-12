@@ -11,6 +11,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
+import org.lwjgl.util.vector.Vector3f;
 import shaders.StaticShader;
 import shaders.TerrainShader;
 import terrains.Terrain;
@@ -30,6 +31,8 @@ public class MasterRenderer {
 
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader;
+    private Vector3f skyColour = new Vector3f(0.3f, 0.3f, 0.3f);
+    private boolean fogEnabled = true;
 
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
@@ -59,6 +62,8 @@ public class MasterRenderer {
         prepare();
         shader.loadLight(sun);
         shader.loadViewMatrix(camera);
+        shader.loadSkyColour(skyColour);
+        shader.loadFogEnabled(fogEnabled);
         renderer.render(entities);
         shader.stop();
         terrainShader.start();
@@ -112,4 +117,7 @@ public class MasterRenderer {
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
         projectionMatrix.m33 = 0;
     }
+
+    public void enableFog() { this.fogEnabled = true; }
+    public void disableFog() { this.fogEnabled = false; }
 }
