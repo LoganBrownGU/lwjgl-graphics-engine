@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import gui.GUIRenderer;
+import gui.GUITexture;
 import models.RawModel;
 import models.TexturedModel;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import renderEngine.DisplayManager;
@@ -30,28 +33,26 @@ public class MainGameLoop {
         DisplayManager.createDisplay("test", 1280, 720, true, false);
         Loader loader = new Loader();
 
-        RawModel model = OBJLoader.loadObjModel("assets/tree.obj", loader);
-        ModelTexture modelTexture = new ModelTexture(loader.loadTexture("assets/tree.png"));
-        modelTexture.setTransparent(true);
-        TexturedModel staticModel = new TexturedModel(model, modelTexture);
+        TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/tree.obj", loader), new ModelTexture(loader.loadTexture("assets/tree.png")));
+        staticModel.getTexture().setTransparent(true);
 
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 1; i++)
-            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 80 - 40, 0, random.nextFloat() * -60), 0, 0, 0, 3, 1));
-            //entities.add(new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 3, 1));
-
+        for (int i = 0; i < 5; i++)
+            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 80 - 40, 0, random.nextFloat() * -60), 0, 0, 0, 3, 2));
 
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
-
-        Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("assets/grass.png")));
-        Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("assets/grass.png")));
 
         Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/shaders", camera);
         renderer.disableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
+
+        ArrayList<GUITexture> guis = new ArrayList<>();
+        guis.add(new GUITexture(loader.loadTexture("assets/grass.png"), new Vector2f(0, 0), new Vector2f(.01f, .01f)));
+
+        GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         while (!Display.isCloseRequested()) {
             camera.move();
@@ -75,16 +76,16 @@ public class MainGameLoop {
                 }
             }
 
-            renderer.processTerrain(terrain);
-            renderer.processTerrain(terrain2);
-            for (Entity entity : entities) {
+            for (Entity entity : entities)
                 renderer.processEntity(entity);
-            }
+
             renderer.render(light, camera);
+            guiRenderer.render(guis);
             DisplayManager.updateDisplay();
         }
 
         renderer.cleanUp();
+        guiRenderer.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
 
