@@ -99,8 +99,7 @@ public class MasterRenderer {
     public void prepare() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        float colour = 0.3f;
-        GL11.glClearColor(colour, colour, colour, 1);
+        GL11.glClearColor(skyColour.x, skyColour.y, skyColour.z, 1);
     }
 
     private void createProjectionMatrix() {
@@ -116,6 +115,10 @@ public class MasterRenderer {
         projectionMatrix.m23 = -1;
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
         projectionMatrix.m33 = 0;
+    }
+
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
     }
 
     public void enableFog() { this.fogEnabled = true; }

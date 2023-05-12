@@ -1,9 +1,12 @@
 package toolbox;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
+import org.lwjgl.util.vector.Vector4f;
 
 public class Maths {
 
@@ -30,6 +33,28 @@ public class Maths {
 		Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);
 		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
 		return viewMatrix;
+	}
+
+	public static Vector4f clipSpaceToEyeSpace(Vector4f clipCoords, Matrix4f projectionMatrix) {
+		Matrix4f inverted = Matrix4f.invert(projectionMatrix, null);
+		Vector4f eyeCoords = Matrix4f.transform(inverted, clipCoords, null);
+		eyeCoords.z = 0;
+		eyeCoords.w = 0;
+		return eyeCoords;
+	}
+
+	public static Vector3f eyeSpaceToWorldSpace(Vector4f eyeCoords, Matrix4f viewMatrix) {
+		Matrix4f inverted = Matrix4f.invert(viewMatrix, null);
+		Vector4f worldCoords = Matrix4f.transform(viewMatrix, eyeCoords, null);
+		return new Vector3f(worldCoords.x, worldCoords.y, worldCoords.z);
+	}
+
+	public static Vector2f mouseCoordsToGLCoords(Vector2f mouseCoords) {
+		Vector2f glCoords = new Vector2f();
+		glCoords.x = (2 * mouseCoords.x) / Display.getWidth() - 1;
+		glCoords.y = (2 * mouseCoords.y) / Display.getHeight() - 1;
+
+		return glCoords;
 	}
 
 }
