@@ -12,7 +12,6 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../lwjgl-2.9.1/lwjgl-2.9.1/jar/asm-debug-all.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../lwjgl-2.9.1/lwjgl-2.9.1/jar/lwjgl_util_applet.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../lwjgl-2.9.1/lwjgl-2.9.1/jar/AppleJavaExtensions.jar" path-in-jar="/" />
-      <element id="library" level="project" name="windows" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../slick-util.jar" path-in-jar="/" />
     </root>
   </artifact>
