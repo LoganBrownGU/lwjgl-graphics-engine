@@ -25,14 +25,15 @@ public class Camera {
             direction = new Vector3f((float) -Math.sin(Math.toRadians(rotation.y)), (float) Math.sin(Math.toRadians(rotation.x)), (float) Math.cos(Math.toRadians(rotation.y)));
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-            position.y += 0.5f;
+            position.y += 0.2f;
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            position.y -= 0.5f;
+            position.y -= 0.2f;
 
 
-        if (direction != null)
+        if (direction != null) {
+            direction.scale(0.2f);
             Vector3f.add(position, direction, position);
-
+        }
 
         if (Mouse.isButtonDown(2)) {
             this.rotation.y += (float) Mouse.getDX() / 10;
