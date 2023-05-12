@@ -11,44 +11,28 @@ public class Camera {
     private float fov;
 
     public void move() {
-        /*Vector3f direction = new Vector3f(rotation);
-        System.out.print("rotation: " + rotation);
-
-        if (this.rotation.x == 0 && this.rotation.y == 0 && this.rotation.z == 0)
-            direction = new Vector3f(0, 0, -1);
-        else
-            direction.normalise();
-        System.out.println(" direction: " + direction);*/
-        System.out.println(rotation);
-
         Vector3f direction = null;
+        if (Keyboard.isKeyDown(Keyboard.KEY_W))
+            direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y)), (float) -Math.sin(Math.toRadians(rotation.x)), (float) -Math.cos(Math.toRadians(rotation.y)));
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y)), (float) Math.sin(Math.toRadians(rotation.x)), (float) Math.cos(Math.toRadians(rotation.y)));
-            this.position.x += Math.sin(Math.toRadians(rotation.y));
-            this.position.y -= Math.sin(Math.toRadians(rotation.x));
-            this.position.z -= Math.cos(Math.toRadians(rotation.y));
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            this.position.x += Math.sin(Math.toRadians(rotation.y + 90));
-            this.position.y -= Math.sin(Math.toRadians(rotation.x));
-            this.position.z -= Math.cos(Math.toRadians(rotation.y + 90));
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            position.x -= 0.2f;
-        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_D))
+            direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y + 90)), 0, (float) -Math.cos(Math.toRadians(rotation.y + 90)));
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_A))
+            direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y - 90)), 0, (float) -Math.cos(Math.toRadians(rotation.y - 90)));
+
         if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            position.z += 0.2f;
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-            position.y += 0.2f;
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            position.y -= 0.2f;
-        }
+            direction = new Vector3f((float) -Math.sin(Math.toRadians(rotation.y)), (float) Math.sin(Math.toRadians(rotation.x)), (float) Math.cos(Math.toRadians(rotation.y)));
 
-        if (rotation != null) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+            position.y += 0.5f;
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+            position.y -= 0.5f;
 
-        }
+
+        if (direction != null)
+            Vector3f.add(position, direction, position);
+
 
         if (Mouse.isButtonDown(2)) {
             this.rotation.y += (float) Mouse.getDX() / 10;
