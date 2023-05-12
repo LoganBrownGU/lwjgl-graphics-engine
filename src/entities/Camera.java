@@ -8,9 +8,10 @@ public class Camera {
 
     private Vector3f position;
     private Vector3f rotation;
-    private float fov;
+    private final float fov;
 
     public void move() {
+
         Vector3f direction = null;
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
             direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y)), (float) -Math.sin(Math.toRadians(rotation.x)), (float) -Math.cos(Math.toRadians(rotation.y)));
@@ -65,9 +66,5 @@ public class Camera {
 
     public float getFov() {
         return fov;
-    }
-
-    public void setFov(float fov) {
-        this.fov = fov;
     }
 }
