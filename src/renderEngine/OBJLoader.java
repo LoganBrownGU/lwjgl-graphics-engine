@@ -9,6 +9,7 @@ import java.util.List;
 
 import models.RawModel;
 
+import org.lwjgl.Sys;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -65,10 +66,17 @@ public class OBJLoader {
 				String[] vertex1 = currentLine[1].split("/");
 				String[] vertex2 = currentLine[2].split("/");
 				String[] vertex3 = currentLine[3].split("/");
-				
-				processVertex(vertex1,indices,textures,normals,textureArray,normalsArray);
-				processVertex(vertex2,indices,textures,normals,textureArray,normalsArray);
-				processVertex(vertex3,indices,textures,normals,textureArray,normalsArray);
+
+				try {
+					processVertex(vertex1, indices, textures, normals, textureArray, normalsArray);
+					processVertex(vertex2, indices, textures, normals, textureArray, normalsArray);
+					processVertex(vertex3, indices, textures, normals, textureArray, normalsArray);
+				} catch (IndexOutOfBoundsException e) {
+					System.out.println("error reading " + fPath);
+					e.printStackTrace();
+					System.exit(-1);
+				}
+
 				line = reader.readLine();
 			}
 			reader.close();
@@ -96,7 +104,7 @@ public class OBJLoader {
 
 	private static void processVertex(String[] vertexData, List<Integer> indices,
 			List<Vector2f> textures, List<Vector3f> normals, float[] textureArray,
-			float[] normalsArray) {
+			float[] normalsArray) throws IndexOutOfBoundsException {
 		int currentVertexPointer = Integer.parseInt(vertexData[0]) - 1;
 		indices.add(currentVertexPointer);
 		Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1])-1);
