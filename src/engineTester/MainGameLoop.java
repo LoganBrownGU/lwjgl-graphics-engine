@@ -37,9 +37,9 @@ public class MainGameLoop {
 
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 5; i++)
-            //entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 80 - 40, 0, random.nextFloat() * -60), 0, 0, 0, 3, 1));
-            entities.add(new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 3, 1));
+        for (int i = 0; i < 1; i++)
+            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 80 - 40, 0, random.nextFloat() * -60), 0, 0, 0, 3, 1));
+            //entities.add(new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 3, 1));
 
 
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
@@ -58,15 +58,21 @@ public class MainGameLoop {
             mp.update();
 
             if (Mouse.isButtonDown(0)) {
-                Vector3f ray = mp.getCurrentRay();
+                /*Vector3f ray = mp.getCurrentRay();
                 Vector3f newPos = new Vector3f();
-                int scale = 10;
-                newPos.z = camera.getPosition().x + ray.x * scale;
-                newPos.y = camera.getPosition().y + ray.y * scale;
-                newPos.x = camera.getPosition().z + ray.z * scale;
+                Vector3f direction = new Vector3f((float) Math.sin(Math.toRadians(camera.getRotation().y)), (float) -Math.sin(Math.toRadians(camera.getRotation().x)), (float) -Math.cos(Math.toRadians(camera.getRotation().y)));
+                int scale = 100;
+                newPos.x = camera.getPosition().x + direction.x * scale;
+                newPos.y = camera.getPosition().y + direction.y * scale;
+                newPos.z = camera.getPosition().z + direction.z * scale;
 
-                System.out.println(ray + " " + newPos);
-                entities.add(new Entity(staticModel, newPos, 0, 0, 0, 3, 1));
+                System.out.println(direction + " " + newPos);
+                entities.add(new Entity(staticModel, newPos, 0, 0, 0, 3, 1));*/
+
+                for (Entity entity : entities) {
+                    if (mp.isIntersecting(entity.getPosition(), entity.hitRadius))
+                        System.out.println(entity);
+                }
             }
 
             renderer.processTerrain(terrain);
