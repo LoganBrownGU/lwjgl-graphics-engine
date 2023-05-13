@@ -33,13 +33,20 @@ public class MainGameLoop {
         DisplayManager.createDisplay("test", 1280, 720, true, false);
         Loader loader = new Loader();
 
-        TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/tree.obj", loader), new ModelTexture(loader.loadTexture("assets/tree.png")));
+        TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
         staticModel.getTexture().setTransparent(true);
+
+        TexturedModel sphere = new TexturedModel(OBJLoader.loadObjModel("assets/sphere.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
 
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 5; i++)
-            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 80 - 40, 0, random.nextFloat() * -60), 0, 0, 0, 3, 2));
+        for (int i = 0; i < 5; i++) {
+            Entity e = new Entity(staticModel, new Vector3f(random.nextFloat() * 30 - 15, 0, random.nextFloat() * -30), 0, 0, 0, 1, 1);
+            entities.add(e);
+            Vector3f pos = new Vector3f(e.getPosition());
+            pos.y += 1;
+            entities.add(new Entity(sphere, pos, 0, 0, 0, e.hitRadius, 0));
+        }
 
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
@@ -50,7 +57,9 @@ public class MainGameLoop {
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
 
         ArrayList<GUITexture> guis = new ArrayList<>();
-        guis.add(new GUITexture(loader.loadTexture("assets/grass.png"), new Vector2f(0, 0), new Vector2f(.01f, .01f)));
+        float aspect = (float) Display.getWidth() / Display.getHeight();
+        float guiSize = .03f;
+        guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
 
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
@@ -59,17 +68,6 @@ public class MainGameLoop {
             mp.update();
 
             if (Mouse.isButtonDown(0)) {
-                /*Vector3f ray = mp.getCurrentRay();
-                Vector3f newPos = new Vector3f();
-                Vector3f direction = new Vector3f((float) Math.sin(Math.toRadians(camera.getRotation().y)), (float) -Math.sin(Math.toRadians(camera.getRotation().x)), (float) -Math.cos(Math.toRadians(camera.getRotation().y)));
-                int scale = 100;
-                newPos.x = camera.getPosition().x + direction.x * scale;
-                newPos.y = camera.getPosition().y + direction.y * scale;
-                newPos.z = camera.getPosition().z + direction.z * scale;
-
-                System.out.println(direction + " " + newPos);
-                entities.add(new Entity(staticModel, newPos, 0, 0, 0, 3, 1));*/
-
                 for (Entity entity : entities) {
                     if (mp.isIntersecting(entity.getPosition(), entity.hitRadius))
                         System.out.println(entity);

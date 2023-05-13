@@ -17,6 +17,14 @@ uniform vec3 skyColour;
 const float min_brightness = 0.5;
 const int cel_num = 5;
 
+float cel_shade(float brightness) {
+    brightness *= cel_num;
+    brightness = round(brightness);
+    brightness /= cel_num;
+
+    return brightness;
+}
+
 void main(void){
 
     vec3 unitNormal = normalize(surfaceNormal);
@@ -24,6 +32,7 @@ void main(void){
 
     float nDotl = dot(unitNormal, unitLightVector);
     float brightness = max(nDotl, 0.1);
+    //brightness = cel_shade(brightness);
     vec3 diffuse = brightness * lightColour;
 
     vec3 unitVectorToCamera = normalize(toCameraVector);
@@ -39,9 +48,6 @@ void main(void){
     if (textureColour[3] < 0.5) discard;
 
     out_Color =  vec4(diffuse, 1.0) * textureColour + vec4(finalSpecular, 1.0);
-    out_Color *= cel_num;
-    out_Color = round(out_Color);
-    out_Color /= cel_num;
 
     out_Color = mix(vec4(skyColour, 1), out_Color, visibility);
 }

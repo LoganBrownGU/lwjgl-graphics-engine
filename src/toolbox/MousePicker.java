@@ -34,7 +34,8 @@ public class MousePicker {
         Vector3f ray = calculateMouseRay();
         Vector3f p1 = camera.getPosition();
         Vector3f p2 = new Vector3f(p1.x + ray.x * range, p1.y + ray.y * range, p1.z + ray.z * range);
-        Vector3f p3 = spherePosition;
+        Vector3f p3 = new Vector3f(spherePosition);
+        p3.y += radius;
         // a = (x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2
         float a = (float) (Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
         // b = 2[ (x2 - x1) (x1 - x3) + (y2 - y1) (y1 - y3) + (z2 - z1) (z1 - z3) ]
@@ -43,7 +44,6 @@ public class MousePicker {
         float c = p3.x*p3.x + p3.y*p3.y + p3.z*p3.z + p1.x*p1.x + p1.y*p1.y + p1.z*p1.z - 2*(p3.x*p1.x + p3.y*p1.y + p3.z*p1.z) - radius*radius;
 
         float determinant = b*b - 4*a*c;
-        System.out.println(determinant);
 
         return determinant >= 0;
     }

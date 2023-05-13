@@ -31,7 +31,7 @@ public class MasterRenderer {
 
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader;
-    private Vector3f skyColour = new Vector3f(0.3f, 0.3f, 0.3f);
+    private Vector3f skyColour = new Vector3f(.3f, .3f, .3f);
     private boolean fogEnabled = true;
 
 
