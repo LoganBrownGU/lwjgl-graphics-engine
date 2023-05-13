@@ -49,12 +49,17 @@ public class MousePicker {
     }
 
     private Vector3f calculateMouseRay() {
-        /*Vector2f glCoords = Maths.mouseCoordsToGLCoords(new Vector2f(Mouse.getX(), Mouse.getY()));
-        Vector4f clipCoords = new Vector4f(glCoords.x, glCoords.y, -1, 1);
-        Vector4f eyeCoords = Maths.clipSpaceToEyeSpace(clipCoords, projectionMatrix);
-        return Maths.eyeSpaceToWorldSpace(eyeCoords, viewMatrix).normalise(null);*/
+        Vector3f rot = new Vector3f(camera.getRotation());
+        rot.x = (float) Math.toRadians(rot.x);
+        rot.y = (float) Math.toRadians(rot.y);
+        rot.z = (float) Math.toRadians(rot.z);
 
-        return new Vector3f((float) Math.sin(Math.toRadians(camera.getRotation().y)), (float) -Math.sin(Math.toRadians(camera.getRotation().x)), (float) -Math.cos(Math.toRadians(camera.getRotation().y)));
+        Vector3f resultant = new Vector3f();
+        resultant.x = (float) (Math.sin(rot.y) * Math.cos(rot.x));
+        resultant.y = (float) -(Math.cos(rot.y) * Math.sin(rot.x));
+        resultant.z = (float) -(Math.cos(rot.y) * Math.cos(rot.x));
+
+        return resultant;
     }
 
     public Vector3f getCurrentRay() {

@@ -28,6 +28,7 @@ public class DisplayManager {
             Display.setTitle(title);
             Display.setVSyncEnabled(vsync);
             //Mouse.setGrabbed(true);
+            Mouse.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
         }

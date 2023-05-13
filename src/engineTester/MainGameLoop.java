@@ -64,7 +64,7 @@ public class MainGameLoop {
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         while (!Display.isCloseRequested()) {
-            camera.move();
+            camera.move(mp);
             mp.update();
 
             if (Mouse.isButtonDown(0)) {
