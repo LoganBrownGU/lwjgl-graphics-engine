@@ -48,6 +48,9 @@ public class MainGameLoop {
             entities.add(new Entity(sphere, pos, 0, 0, 0, e.hitRadius, 0));
         }
 
+        staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
+        entities.add(new Entity(staticModel, new Vector3f(0, 0, 0), 0, 0, 0, 1, 1));
+
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
         Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
@@ -63,6 +66,11 @@ public class MainGameLoop {
 
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
+        Vector3f[] vertices = {
+                new Vector3f(-1, -1, -1),
+                new Vector3f(1, 1, 1),
+        };
+
         while (!Display.isCloseRequested()) {
             camera.move(mp);
             mp.update();
@@ -72,6 +80,8 @@ public class MainGameLoop {
                     if (mp.isIntersecting(entity.getPosition(), entity.hitRadius))
                         System.out.println(entity);
                 }
+
+                System.out.println(mp.isIntersectingPlane(null, vertices));
             }
 
             for (Entity entity : entities)

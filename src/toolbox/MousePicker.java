@@ -48,6 +48,74 @@ public class MousePicker {
         return determinant >= 0;
     }
 
+    public boolean isIntersectingPlane(Vector3f position, Vector3f[] vertices) {
+
+        Vector3f tmin = new Vector3f(-1000, -1000, -1000);
+        Vector3f tmax = new Vector3f(1000, 1000, 1000);
+
+        float t0 = -1000;
+        float t1 = 1000;
+
+        Vector3f min = vertices[0];
+        Vector3f max = vertices[1];
+        Vector3f r = calculateMouseRay();
+        Vector3f o = camera.getPosition();
+
+        if (r.x >= 0) {
+            tmin.x = (min.x - o.x) / r.x;
+            tmax.x = (max.x - o.x) / r.x;
+        } else {
+            tmin.x = (max.x - o.x) / r.x;
+            tmax.x = (min.x - o.x) / r.x;
+        }
+        if (r.y >= 0) {
+            tmin.y = (min.y - o.y) / r.y;
+            tmax.y = (max.y - o.y) / r.y;
+        } else {
+            tmin.y = (max.y - o.y) / r.y;
+            tmax.y = (min.y - o.y) / r.y;
+        }
+        if (tmin.x > tmax.y || tmin.y > tmax.x)
+            return false;
+
+        if (tmin.y > tmin.x)
+            tmin.x = tmin.y;
+        if (tmax.y < tmax.x)
+            tmax.x = tmax.y;
+
+        if (r.z >= 0) {
+            tmin.z = (min.z - o.z) / r.z;
+            tmax.z = (max.z - o.z) / r.z;
+        } else {
+            tmin.z = (max.z - o.z) / r.z;
+            tmax.z = (min.z - o.z) / r.z;
+        }
+
+        if (tmin.x > tmax.z || tmin.z > tmax.x)
+            return false;
+        if (tmin.z > tmin.x)
+            tmin.x = tmin.z;
+        if (tmax.z < tmax.x)
+            tmax.x = tmax.z;
+
+        return (tmin.x < t1) && (tmax.x > t0);
+
+        /*Vector3f a = new Vector3f(vertices[0]);
+        Vector3f b = new Vector3f(vertices[1]);
+        Vector3f c = new Vector3f(vertices[2]);
+        Vector3f o = new Vector3f(camera.getPosition());
+        Vector3f d = new Vector3f(calculateMouseRay());
+
+        Vector3f aSubb = Vector3f.sub(a, b, null);
+        Vector3f bSubc = Vector3f.sub(b, c, null);
+        Vector3f n = Vector3f.cross(aSubb, bSubc, null);
+
+        float t = (a.x*n.x + a.y*n.y + a.z*n.z - n.x*o.x - n.y*o.y - n.z*o.z) /
+                (d.x*n.x - d.y*n.y + d.z*n.z);
+
+        System.out.println(t);*/
+    }
+
     private Vector3f calculateMouseRay() {
         Vector3f rot = new Vector3f(camera.getRotation());
         rot.x = (float) Math.toRadians(rot.x);

@@ -18,8 +18,9 @@ public class Camera {
             //direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y)), (float) -Math.sin(Math.toRadians(rotation.x)), (float) -Math.cos(Math.toRadians(rotation.y)));
             direction = mp.getCurrentRay();
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y + 90)), 0, (float) -Math.cos(Math.toRadians(rotation.y + 90)));
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            direction = mp.getCurrentRay();
+        }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_A))
             direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y - 90)), 0, (float) -Math.cos(Math.toRadians(rotation.y - 90)));
