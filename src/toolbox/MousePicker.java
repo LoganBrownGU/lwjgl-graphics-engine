@@ -37,10 +37,8 @@ public class MousePicker {
 
         return resultant;*/
 
-        float mouseX = Mouse.getX();
-        float mouseY = Mouse.getY();
-
-
+        Vector2f coords = new Vector2f(Mouse.getX(), Mouse.getY());
+        return Maths.screenCoordsToRay(coords, projectionMatrix, viewMatrix);
     }
 
     public Vector3f getCurrentRay() {

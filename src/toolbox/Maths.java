@@ -46,23 +46,31 @@ public class Maths {
 	public static Vector4f clipSpaceToEyeSpace(Vector4f clipCoords, Matrix4f projectionMatrix) {
 		Matrix4f inverted = Matrix4f.invert(projectionMatrix, null);
 		Vector4f eyeCoords = Matrix4f.transform(inverted, clipCoords, null);
-		eyeCoords.z = 0;
-		eyeCoords.w = 0;
+		eyeCoords.z = -1f;
+		eyeCoords.w = 0f;
 		return eyeCoords;
 	}
 
-	public static Vector3f eyeSpaceToWorldSpace(Vector4f eyeCoords, Matrix4f viewMatrix) {
+	public static Vector4f eyeSpaceToWorldSpace(Vector4f eyeCoords, Matrix4f viewMatrix) {
 		Matrix4f inverted = Matrix4f.invert(viewMatrix, null);
-		Vector4f worldCoords = Matrix4f.transform(viewMatrix, eyeCoords, null);
-		return new Vector3f(worldCoords.x, worldCoords.y, worldCoords.z);
+		return Matrix4f.transform(inverted, eyeCoords, null);
 	}
 
-	public static Vector2f mouseCoordsToGLCoords(Vector2f mouseCoords) {
+	public static Vector2f mouseCoordsToNormalisedDeviceCoords(Vector2f mouseCoords) {
 		Vector2f glCoords = new Vector2f();
-		glCoords.x = (2 * mouseCoords.x) / Display.getWidth() - 1;
-		glCoords.y = (2 * mouseCoords.y) / Display.getHeight() - 1;
+		glCoords.x = (2f * mouseCoords.x) / Display.getWidth() - 1f;
+		glCoords.y = (2f * mouseCoords.y) / Display.getHeight() - 1f;
 
 		return glCoords;
+	}
+
+	public static Vector3f screenCoordsToRay(Vector2f screenCoords, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
+		Vector2f normalisedDeviceCoords = Maths.mouseCoordsToNormalisedDeviceCoords(new Vector2f(screenCoords.x, screenCoords.y));
+		Vector4f clipCoords = new Vector4f(normalisedDeviceCoords.x, normalisedDeviceCoords.y, -1f, -1);
+		Vector4f eyeCoords = Maths.clipSpaceToEyeSpace(clipCoords, projectionMatrix);
+		Vector4f worldCoords = Maths.eyeSpaceToWorldSpace(eyeCoords, viewMatrix);
+		Vector3f ray = new Vector3f(worldCoords.x, worldCoords.y, worldCoords.z);
+		return ray.normalise(null);
 	}
 
 }

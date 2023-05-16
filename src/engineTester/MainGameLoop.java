@@ -22,6 +22,7 @@ import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import toolbox.Maths;
 import toolbox.MousePicker;
 
 public class MainGameLoop {
@@ -61,7 +62,7 @@ public class MainGameLoop {
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         while (!Display.isCloseRequested()) {
-            camera.move(mp);
+            camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             mp.update();
 
             if (Mouse.isButtonDown(0)) {

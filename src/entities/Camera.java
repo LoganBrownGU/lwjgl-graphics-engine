@@ -2,7 +2,11 @@ package entities;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import toolbox.Maths;
 import toolbox.MousePicker;
 
 public class Camera {
@@ -11,15 +15,15 @@ public class Camera {
     private Vector3f rotation;
     private final float fov;
 
-    public void move(MousePicker mp) {
+    public void move(Matrix4f projectionMatrix, Matrix4f viewMatrix) {
 
         Vector3f direction = null;
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
             //direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y)), (float) -Math.sin(Math.toRadians(rotation.x)), (float) -Math.cos(Math.toRadians(rotation.y)));
-            direction = mp.getCurrentRay();
+            direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() /2, (float) Display.getHeight() /2), projectionMatrix, viewMatrix);
 
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            direction = mp.getCurrentRay();
+            //direction = mp.getCurrentRay();
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_A))
