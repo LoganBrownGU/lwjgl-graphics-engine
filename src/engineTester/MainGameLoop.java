@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import entities.*;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import models.RawModel;
@@ -21,9 +22,6 @@ import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
-import entities.Camera;
-import entities.Entity;
-import entities.Light;
 import toolbox.MousePicker;
 
 public class MainGameLoop {
@@ -36,20 +34,16 @@ public class MainGameLoop {
         TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
         staticModel.getTexture().setTransparent(true);
 
-        TexturedModel sphere = new TexturedModel(OBJLoader.loadObjModel("assets/sphere.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
-
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
-            Entity e = new Entity(staticModel, new Vector3f(random.nextFloat() * 30 - 15, 0, random.nextFloat() * -30), 0, 0, 0, 1, 1);
+            Vector3f pos = new Vector3f(random.nextFloat() * 30 - 15, 0, random.nextFloat() * -30);
+            Entity e = new Entity(staticModel, pos, 0, 0, 0, 1, new SpherePicker(pos, 1));
             entities.add(e);
-            Vector3f pos = new Vector3f(e.getPosition());
-            pos.y += 1;
-            entities.add(new Entity(sphere, pos, 0, 0, 0, e.hitRadius, 0));
         }
 
         staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
-        entities.add(new Entity(staticModel, new Vector3f(0, 0, 0), 0, 0, 0, 1, 1));
+        entities.add(new Entity(staticModel, new Vector3f(0, 0, 0), 0, 0, 0, 1, new AABBPicker(new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1))));
 
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
@@ -66,22 +60,15 @@ public class MainGameLoop {
 
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
-        Vector3f[] vertices = {
-                new Vector3f(-1, -1, -1),
-                new Vector3f(1, 1, 1),
-        };
-
         while (!Display.isCloseRequested()) {
             camera.move(mp);
             mp.update();
 
             if (Mouse.isButtonDown(0)) {
                 for (Entity entity : entities) {
-                    if (mp.isIntersecting(entity.getPosition(), entity.hitRadius))
+                    if (entity.getPicker().isIntersecting(mp.getCurrentRay(), camera.getPosition()))
                         System.out.println(entity);
                 }
-
-                System.out.println(mp.isIntersectingPlane(null, vertices));
             }
 
             for (Entity entity : entities)

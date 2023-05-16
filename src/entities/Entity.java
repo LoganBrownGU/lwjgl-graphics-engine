@@ -10,17 +10,17 @@ public class Entity {
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
-	public final float hitRadius;
+	private final Picker picker;
 
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
-			float scale, int hitRadius) {
+			float scale, Picker picker) {
 		this.model = model;
 		this.position = position;
 		this.rotX = rotX;
 		this.rotY = rotY;
 		this.rotZ = rotZ;
 		this.scale = scale;
-		this.hitRadius = hitRadius;
+		this.picker = picker;
 	}
 
 	public void increasePosition(float dx, float dy, float dz) {
@@ -83,4 +83,7 @@ public class Entity {
 		this.scale = scale;
 	}
 
+	public Picker getPicker() {
+		return picker;
+	}
 }
