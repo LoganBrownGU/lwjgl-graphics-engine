@@ -23,19 +23,22 @@ public class AABBPicker implements Picker {
 
         min = new Vector3f();
 
-        if (r.x >= 0) {
-            tmin.x = (min.x - o.x) / r.x;
-            tmax.x = (max.x - o.x) / r.x;
+        float div = 1 / r.x;
+        if (div >= 0) {
+            tmin.x = (min.x - o.x) * div;
+            tmax.x = (max.x - o.x) * div;
         } else {
-            tmin.x = (max.x - o.x) / r.x;
-            tmax.x = (min.x - o.x) / r.x;
+            tmin.x = (max.x - o.x) * div;
+            tmax.x = (min.x - o.x) * div;
         }
-        if (r.y >= 0) {
-            tmin.y = (min.y - o.y) / r.y;
-            tmax.y = (max.y - o.y) / r.y;
+
+        div = 1 / r.y;
+        if (div >= 0) {
+            tmin.y = (min.y - o.y) * div;
+            tmax.y = (max.y - o.y) * div;
         } else {
-            tmin.y = (max.y - o.y) / r.y;
-            tmax.y = (min.y - o.y) / r.y;
+            tmin.y = (max.y - o.y) * div;
+            tmax.y = (min.y - o.y) * div;
         }
         if (tmin.x > tmax.y || tmin.y > tmax.x)
             return false;
@@ -45,12 +48,13 @@ public class AABBPicker implements Picker {
         if (tmax.y < tmax.x)
             tmax.x = tmax.y;
 
-        if (r.z >= 0) {
-            tmin.z = (min.z - o.z) / r.z;
-            tmax.z = (max.z - o.z) / r.z;
+        div = 1 / r.z;
+        if (div >= 0) {
+            tmin.z = (min.z - o.z) * div;
+            tmax.z = (max.z - o.z) * div;
         } else {
-            tmin.z = (max.z - o.z) / r.z;
-            tmax.z = (min.z - o.z) / r.z;
+            tmin.z = (max.z - o.z) * div;
+            tmax.z = (min.z - o.z) * div;
         }
 
         if (tmin.x > tmax.z || tmin.z > tmax.x)

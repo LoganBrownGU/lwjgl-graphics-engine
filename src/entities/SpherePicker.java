@@ -12,13 +12,12 @@ public class SpherePicker implements Picker {
         if (Vector3f.sub(spherePosition, rayPosition, null).lengthSquared() < radius*radius)
             return true;
 
-        int range = 100;
+        int range = 1000;
 
         Vector3f ray = new Vector3f(rayDirection);
+        Vector3f p3 = new Vector3f(spherePosition);
         Vector3f p1 = new Vector3f(rayPosition);
         Vector3f p2 = new Vector3f(p1.x + ray.x * range, p1.y + ray.y * range, p1.z + ray.z * range);
-        Vector3f p3 = new Vector3f(spherePosition);
-        p3.y += radius;
         // a = (x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2
         float a = (float) (Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
         // b = 2[ (x2 - x1) (x1 - x3) + (y2 - y1) (y1 - y3) + (z2 - z1) (z1 - z3) ]

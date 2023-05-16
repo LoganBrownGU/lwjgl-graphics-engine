@@ -25,7 +25,7 @@ public class MousePicker {
     }
 
     private Vector3f calculateMouseRay() {
-        Vector3f rot = new Vector3f(camera.getRotation());
+        /*Vector3f rot = new Vector3f(camera.getRotation());
         rot.x = (float) Math.toRadians(rot.x);
         rot.y = (float) Math.toRadians(rot.y);
         rot.z = (float) Math.toRadians(rot.z);
@@ -35,7 +35,12 @@ public class MousePicker {
         resultant.y = (float) -(Math.cos(rot.y) * Math.sin(rot.x));
         resultant.z = (float) -(Math.cos(rot.y) * Math.cos(rot.x));
 
-        return resultant;
+        return resultant;*/
+
+        float mouseX = Mouse.getX();
+        float mouseY = Mouse.getY();
+
+
     }
 
     public Vector3f getCurrentRay() {

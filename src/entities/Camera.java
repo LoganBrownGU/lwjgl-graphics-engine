@@ -42,6 +42,9 @@ public class Camera {
         if (Mouse.isButtonDown(2) || Mouse.isButtonDown(1)) {
             this.rotation.y += (float) Mouse.getDX() / 10;
             this.rotation.x -= (float) Mouse.getDY() / 10;
+
+            if (this.rotation.x > 90) this.rotation.x = 90;
+            if (this.rotation.x < -90) this.rotation.x = -90;
         }
     }
 
