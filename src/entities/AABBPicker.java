@@ -13,8 +13,15 @@ public class AABBPicker implements Picker {
         float t0 = -1000;
         float t1 = 1000;
 
+        Vector3f max = new Vector3f(this.max);
+        Vector3f min = new Vector3f(this.min);
+        max = Vector3f.sub(max, min, null);
+
         Vector3f r = rayDirection;
-        Vector3f o = rayPosition;
+        Vector3f o = new Vector3f(rayPosition);
+        o = Vector3f.sub(o, min, null);
+
+        min = new Vector3f();
 
         if (r.x >= 0) {
             tmin.x = (min.x - o.x) / r.x;
