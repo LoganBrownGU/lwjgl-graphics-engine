@@ -86,4 +86,9 @@ public class Entity {
 	public Picker getPicker() {
 		return picker;
 	}
+
+	@Override
+	public String toString() {
+		return "entity @ " + position;
+	}
 }

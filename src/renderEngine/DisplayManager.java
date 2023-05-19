@@ -41,9 +41,6 @@ public class DisplayManager {
         if (!vsyncEnabled) Display.sync(FPS_CAP);
 
         Display.update();
-
-        if (Display.isCloseRequested())
-            Display.destroy();
     }
 
     public static void closeDisplay() {

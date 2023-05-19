@@ -8,10 +8,9 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 public class MousePicker {
-    private Vector3f currentRay;
-    private Matrix4f projectionMatrix;
+    private final Matrix4f projectionMatrix;
     private Matrix4f viewMatrix;
-    private Camera camera;
+    private final Camera camera;
 
     public MousePicker(Matrix4f projectionMatrix, Camera camera) {
         this.projectionMatrix = projectionMatrix;
@@ -19,30 +18,19 @@ public class MousePicker {
         this.viewMatrix = Maths.createViewMatrix(camera);
     }
 
-    public void update() {
+    private void update() {
         viewMatrix = Maths.createViewMatrix(camera);
-        currentRay = calculateMouseRay();
     }
 
     private Vector3f calculateMouseRay() {
-        /*Vector3f rot = new Vector3f(camera.getRotation());
-        rot.x = (float) Math.toRadians(rot.x);
-        rot.y = (float) Math.toRadians(rot.y);
-        rot.z = (float) Math.toRadians(rot.z);
-
-        Vector3f resultant = new Vector3f();
-        resultant.x = (float) (Math.sin(rot.y) * Math.cos(rot.x));
-        resultant.y = (float) -(Math.cos(rot.y) * Math.sin(rot.x));
-        resultant.z = (float) -(Math.cos(rot.y) * Math.cos(rot.x));
-
-        return resultant;*/
+        update();
 
         Vector2f coords = new Vector2f(Mouse.getX(), Mouse.getY());
         return Maths.screenCoordsToRay(coords, projectionMatrix, viewMatrix);
     }
 
     public Vector3f getCurrentRay() {
-        currentRay = calculateMouseRay();
-        return currentRay;
+        update();
+        return calculateMouseRay();
     }
 }
