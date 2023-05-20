@@ -14,6 +14,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import skybox.SkyboxRenderer;
 import terrains.Terrain;
 import entities.Camera;
 import entities.Entity;
@@ -33,6 +34,7 @@ public class MasterRenderer {
     private TerrainShader terrainShader;
     private Vector3f skyColour = new Vector3f(.3f, .3f, .3f);
     private boolean fogEnabled = true;
+    private SkyboxRenderer skyboxRenderer;
 
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
@@ -46,6 +48,7 @@ public class MasterRenderer {
         createProjectionMatrix();
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+        skyboxRenderer = new SkyboxRenderer(new Loader(), projectionMatrix, "assets/textures/skybox");
     }
 
     public static void enableCulling() {
@@ -71,6 +74,7 @@ public class MasterRenderer {
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
+        skyboxRenderer.render(camera);
         terrains.clear();
         entities.clear();
     }

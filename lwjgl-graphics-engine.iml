@@ -10,5 +10,6 @@
     <orderEntry type="library" name="slick-util" level="project" />
     <orderEntry type="library" name="jar" level="project" />
     <orderEntry type="library" name="windows" level="project" />
+    <orderEntry type="library" name="PNGDecoder" level="project" />
   </component>
 </module>

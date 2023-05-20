@@ -66,6 +66,7 @@ public class MainGameLoop {
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         while (!Display.isCloseRequested()) {
+            if (Mouse.next() && !Mouse.getEventButtonState() && Mouse.getEventButton() == 0) System.out.println("dsfjk");
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
 
             if (Mouse.isButtonDown(0)) {

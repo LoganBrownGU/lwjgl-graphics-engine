@@ -47,7 +47,7 @@ public class GUIRenderer {
 
     public GUIRenderer(Loader loader) {
         float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
-        quad = loader.loadToVAO(positions);
+        quad = loader.loadToVAO(positions, 2);
         shader = new GUIShader();
     }
 }
