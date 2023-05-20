@@ -13,9 +13,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import org.lwjgl.util.vector.Vector3f;
 import shaders.StaticShader;
-import shaders.TerrainShader;
 import skybox.SkyboxRenderer;
-import terrains.Terrain;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -29,26 +27,20 @@ public class MasterRenderer {
     private Matrix4f projectionMatrix;
     private StaticShader shader;
     private EntityRenderer renderer;
-
-    private TerrainRenderer terrainRenderer;
-    private TerrainShader terrainShader;
     private Vector3f skyColour = new Vector3f(.3f, .3f, .3f);
     private boolean fogEnabled = true;
     private SkyboxRenderer skyboxRenderer;
 
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
-    private List<Terrain> terrains = new ArrayList<>();
 
-    public MasterRenderer(String shaderPath, Camera camera) {
+    public MasterRenderer(String shaderPath, String skyboxPath, Camera camera) {
         shader = new StaticShader(shaderPath);
         this.camera = camera;
-        terrainShader = new TerrainShader(shaderPath);
         enableCulling();
         createProjectionMatrix();
         renderer = new EntityRenderer(shader, projectionMatrix);
-        terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
-        skyboxRenderer = new SkyboxRenderer(new Loader(), projectionMatrix, "assets/textures/skybox");
+        skyboxRenderer = new SkyboxRenderer(new Loader(), projectionMatrix, skyboxPath);
     }
 
     public static void enableCulling() {
@@ -69,20 +61,9 @@ public class MasterRenderer {
         shader.loadFogEnabled(fogEnabled);
         renderer.render(entities);
         shader.stop();
-        terrainShader.start();
-        terrainShader.loadLight(sun);
-        terrainShader.loadViewMatrix(camera);
-        terrainRenderer.render(terrains);
-        terrainShader.stop();
         skyboxRenderer.render(camera);
-        terrains.clear();
         entities.clear();
     }
-
-    public void processTerrain(Terrain terrain) {
-        terrains.add(terrain);
-    }
-
     public void processEntity(Entity entity) {
         TexturedModel entityModel = entity.getModel();
         List<Entity> batch = entities.get(entityModel);
@@ -97,7 +78,6 @@ public class MasterRenderer {
 
     public void cleanUp() {
         shader.cleanUp();
-        terrainShader.cleanUp();
     }
 
     public void prepare() {

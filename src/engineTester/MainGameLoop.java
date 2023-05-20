@@ -7,12 +7,10 @@ import java.util.Random;
 import entities.*;
 import gui.GUIRenderer;
 import gui.GUITexture;
-import models.RawModel;
 import models.TexturedModel;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -20,7 +18,6 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
-import terrains.Terrain;
 import textures.ModelTexture;
 import toolbox.Maths;
 import toolbox.MousePicker;
@@ -53,7 +50,7 @@ public class MainGameLoop {
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
         Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
-        MasterRenderer renderer = new MasterRenderer("assets/shaders", camera);
+        MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/normal_sky", camera);
         renderer.disableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
