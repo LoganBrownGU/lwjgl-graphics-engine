@@ -67,7 +67,8 @@ public class MainGameLoop {
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
-        PostProcessing.init(loader);
+        String[] effects = {"contrast"};
+        PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);

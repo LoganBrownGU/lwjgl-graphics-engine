@@ -3,18 +3,18 @@ package postProcessing;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-public class ContrastChanger {
-    private ImageRenderer imageRenderer;
-    private ContrastShader shader;
+public class PPEffect {
+    private final ImageRenderer imageRenderer;
+    private final PPShader shader;
 
 
-    public ContrastChanger() {
-        shader = new ContrastShader();
+    public PPEffect(String vertex, String fragment) {
+        shader = new PPShader(vertex, fragment);
         imageRenderer = new ImageRenderer();
     }
 
     public void render(int texture) {
-         shader.start();
+        shader.start();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
         imageRenderer.renderQuad();
