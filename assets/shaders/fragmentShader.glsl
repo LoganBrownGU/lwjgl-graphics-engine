@@ -14,7 +14,6 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
 
-const float min_brightness = 0.5;
 const int cel_num = 5;
 
 float cel_shade(float brightness) {
