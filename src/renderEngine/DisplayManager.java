@@ -2,11 +2,7 @@ package renderEngine;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.opengl.*;
 
 public class DisplayManager {
 
@@ -24,10 +20,11 @@ public class DisplayManager {
             if (!fullscreen) Display.setDisplayMode(new DisplayMode(width, height));
             else Display.setFullscreen(true);
 
-            Display.create(new PixelFormat(), attribs);
+            Display.create(new PixelFormat().withSamples(4), attribs);
             Display.setTitle(title);
             Display.setVSyncEnabled(vsync);
-            //Mouse.setGrabbed(true);
+            GL11.glEnable(GL13.GL_MULTISAMPLE);
+
             Mouse.create();
         } catch (LWJGLException e) {
             e.printStackTrace();

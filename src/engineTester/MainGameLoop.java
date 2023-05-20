@@ -11,9 +11,13 @@ import models.TexturedModel;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import postProcessing.FBO;
+import postProcessing.PostProcessing;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -26,7 +30,7 @@ public class MainGameLoop {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay("test", 1280, 720, true, false);
+        DisplayManager.createDisplay("test", 1280, 720, true, true);
         Loader loader = new Loader();
 
         TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
@@ -62,9 +66,17 @@ public class MainGameLoop {
 
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
+        FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
+        PostProcessing.init(loader);
+
         while (!Display.isCloseRequested()) {
+            GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+
             if (Mouse.next() && !Mouse.getEventButtonState() && Mouse.getEventButton() == 0) System.out.println("dsfjk");
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
+
+            GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+            fbo.bindFrameBuffer();
 
             if (Mouse.isButtonDown(0)) {
                 for (Entity entity : entities) {
@@ -77,10 +89,16 @@ public class MainGameLoop {
                 renderer.processEntity(entity);
 
             renderer.render(light, camera);
+            fbo.unbindFrameBuffer();
+
+            PostProcessing.doPostProcessing(fbo.getColourTexture());
+
             guiRenderer.render(guis);
             DisplayManager.updateDisplay();
         }
 
+        PostProcessing.cleanUp();
+        fbo.cleanUp();
         renderer.cleanUp();
         guiRenderer.cleanUp();
         loader.cleanUp();

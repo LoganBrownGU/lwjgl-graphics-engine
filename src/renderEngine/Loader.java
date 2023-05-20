@@ -83,6 +83,12 @@ public class Loader {
                     new FileInputStream(fPath));
             GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+
+            if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic) {
+                float amount = Math.min(4f, GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT));
+                GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, amount);
+            } else
+                System.out.println("anisotropic filtering not supported");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Tried to load texture " + fPath + ", didn't work");
