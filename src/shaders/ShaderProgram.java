@@ -13,14 +13,16 @@ import org.lwjgl.util.vector.Vector3f;
 
 public abstract class ShaderProgram {
 
+    public static final int MAX_LIGHTS = 10;
+
     private final int programID;
     private final int vertexShaderID;
     private final int fragmentShaderID;
     protected int location_transformationMatrix;
     protected int location_projectionMatrix;
     protected int location_viewMatrix;
-    protected int location_lightPosition;
-    protected int location_lightColour;
+    protected int location_lightPositions[];
+    protected int location_lightColours[];
     protected int location_shineDamper;
     protected int location_reflectivity;
     protected int location_skyColour;
@@ -44,13 +46,18 @@ public abstract class ShaderProgram {
         location_transformationMatrix = getUniformLocation("transformationMatrix");
         location_projectionMatrix = getUniformLocation("projectionMatrix");
         location_viewMatrix = getUniformLocation("viewMatrix");
-        location_lightPosition = getUniformLocation("lightPosition");
-        location_lightColour = getUniformLocation("lightColour");
         location_shineDamper = getUniformLocation("shineDamper");
         location_reflectivity = getUniformLocation("reflectivity");
         location_reflectivity = getUniformLocation("reflectivity");
         location_skyColour = getUniformLocation("skyColour");
         location_fogEnabled = getUniformLocation("fogEnabled");
+
+        location_lightPositions = new int[MAX_LIGHTS];
+        location_lightColours = new int[MAX_LIGHTS];
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            location_lightPositions[i] = getUniformLocation("lightPositions[" + i + "]");
+            location_lightColours[i] = getUniformLocation("lightColours[" + i + "]");
+        }
     }
 
     protected int getUniformLocation(String uniformName) {

@@ -10,6 +10,10 @@ import org.lwjgl.util.vector.Vector4f;
 
 public class Maths {
 
+	public static Vector3f hexColourToFloat(Vector3f colour) {
+		return null;
+	}
+
 	public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
 		Matrix4f matrix = new Matrix4f();
 		matrix.setIdentity();

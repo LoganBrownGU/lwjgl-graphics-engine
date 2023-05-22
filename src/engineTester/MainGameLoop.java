@@ -30,7 +30,7 @@ public class MainGameLoop {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay("test", 1280, 720, true, true);
+        DisplayManager.createDisplay("test", 1280, 720, true, false);
         Loader loader = new Loader();
 
         TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
@@ -51,7 +51,8 @@ public class MainGameLoop {
         Vector3f max = new Vector3f(pos.x + 1, pos.y, pos.z + 1);
         entities.add(new Entity(staticModel, pos, 0, 0, 0, 1, new AABBPicker(min, max)));
 
-        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
+        ArrayList<Light> lights = new ArrayList<>();
+        lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1)));
 
         Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/paris", camera);
@@ -67,7 +68,7 @@ public class MainGameLoop {
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
-        String[] effects = {"contrast"};
+        String[] effects = {"none"};
         PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         while (!Display.isCloseRequested()) {
@@ -89,7 +90,7 @@ public class MainGameLoop {
             for (Entity entity : entities)
                 renderer.processEntity(entity);
 
-            renderer.render(light, camera);
+            renderer.render(lights, camera);
             fbo.unbindFrameBuffer();
 
             PostProcessing.doPostProcessing(fbo.getColourTexture());

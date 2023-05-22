@@ -52,10 +52,10 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    public void render(Light sun, Camera camera) {
+    public void render(ArrayList<Light> lights, Camera camera) {
         shader.start();
         prepare();
-        shader.loadLight(sun);
+        shader.loadLights(lights);
         shader.loadViewMatrix(camera);
         shader.loadSkyColour(skyColour);
         shader.loadFogEnabled(fogEnabled);

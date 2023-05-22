@@ -8,6 +8,8 @@ import toolbox.Maths;
 import entities.Camera;
 import entities.Light;
 
+import java.util.ArrayList;
+
 public class StaticShader extends ShaderProgram {
 
     public StaticShader(String shaderPath) {
@@ -38,9 +40,16 @@ public class StaticShader extends ShaderProgram {
         super.loadMatrix(location_transformationMatrix, matrix);
     }
 
-    public void loadLight(Light light) {
-        super.loadVector(location_lightPosition, light.getPosition());
-        super.loadVector(location_lightColour, light.getColour());
+    public void loadLights(ArrayList<Light> lights) {
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            if (i < lights.size()) {
+                super.loadVector(location_lightPositions[i], lights.get(i).getPosition());
+                super.loadVector(location_lightColours[i], lights.get(i).getColour());
+            } else {
+                super.loadVector(location_lightPositions[i], new Vector3f(0,0,0));
+                super.loadVector(location_lightColours[i], new Vector3f(0,0,0));
+            }
+        }
     }
 
     public void loadViewMatrix(Camera camera) {
