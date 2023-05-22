@@ -20,7 +20,7 @@ public class DisplayManager {
             if (!fullscreen) Display.setDisplayMode(new DisplayMode(width, height));
             else Display.setFullscreen(true);
 
-            Display.create(new PixelFormat().withSamples(4), attribs);
+            Display.create(new PixelFormat().withSamples(8), attribs);
             Display.setTitle(title);
             Display.setVSyncEnabled(vsync);
             GL11.glEnable(GL13.GL_MULTISAMPLE);

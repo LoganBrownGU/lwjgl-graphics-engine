@@ -13,6 +13,11 @@ public class PPEffect {
         imageRenderer = new ImageRenderer();
     }
 
+    public PPEffect(String vertex, String fragment, int targetFBOWidth, int targetFBOHeight) {
+        shader = new PPShader(vertex, fragment);
+        imageRenderer = new ImageRenderer();
+    }
+
     public void render(int texture) {
         shader.start();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);

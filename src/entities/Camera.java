@@ -19,8 +19,8 @@ public class Camera {
 
         Vector3f direction = null;
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            //direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() /2, (float) Display.getHeight() /2), projectionMatrix, viewMatrix);
-            position.z -= 0.2f;
+            direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() /2, (float) Display.getHeight() /2), projectionMatrix, viewMatrix);
+            //position.z -= 0.2f;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             //direction = mp.getCurrentRay();
