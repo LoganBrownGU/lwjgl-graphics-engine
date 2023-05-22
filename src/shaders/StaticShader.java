@@ -45,9 +45,11 @@ public class StaticShader extends ShaderProgram {
             if (i < lights.size()) {
                 super.loadVector(location_lightPositions[i], lights.get(i).getPosition());
                 super.loadVector(location_lightColours[i], lights.get(i).getColour());
+                super.loadVector(location_attenuations[i], lights.get(i).getAttenuation());
             } else {
                 super.loadVector(location_lightPositions[i], new Vector3f(0,0,0));
                 super.loadVector(location_lightColours[i], new Vector3f(0,0,0));
+                super.loadVector(location_attenuations[i], new Vector3f(1,0,0));
             }
         }
     }

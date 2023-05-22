@@ -43,6 +43,7 @@ public class MainGameLoop {
             Entity e = new Entity(staticModel, pos, 0, 0, 0, 1, new SpherePicker(pos, 1));
             entities.add(e);
         }
+        entities.add(new Entity(staticModel, new Vector3f(0, 0, -200), 0, 0, 0, 1, null));
 
         staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
 
@@ -52,7 +53,8 @@ public class MainGameLoop {
         entities.add(new Entity(staticModel, pos, 0, 0, 0, 1, new AABBPicker(min, max)));
 
         ArrayList<Light> lights = new ArrayList<>();
-        lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1)));
+        lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false));
+        lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
         Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/paris", camera);
@@ -105,7 +107,6 @@ public class MainGameLoop {
         guiRenderer.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
-
     }
 
 }

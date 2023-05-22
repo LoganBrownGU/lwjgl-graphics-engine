@@ -23,6 +23,7 @@ public abstract class ShaderProgram {
     protected int location_viewMatrix;
     protected int location_lightPositions[];
     protected int location_lightColours[];
+    protected int location_attenuations[];
     protected int location_shineDamper;
     protected int location_reflectivity;
     protected int location_skyColour;
@@ -54,9 +55,11 @@ public abstract class ShaderProgram {
 
         location_lightPositions = new int[MAX_LIGHTS];
         location_lightColours = new int[MAX_LIGHTS];
+        location_attenuations = new int[MAX_LIGHTS];
         for (int i = 0; i < MAX_LIGHTS; i++) {
             location_lightPositions[i] = getUniformLocation("lightPositions[" + i + "]");
             location_lightColours[i] = getUniformLocation("lightColours[" + i + "]");
+            location_attenuations[i] = getUniformLocation("attenuations[" + i + "]");
         }
     }
 

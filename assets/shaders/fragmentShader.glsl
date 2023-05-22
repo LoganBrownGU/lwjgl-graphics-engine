@@ -13,6 +13,7 @@ out vec4 out_Color;
 
 uniform sampler2D modelTexture;
 uniform vec3 lightColours[max_lights];
+uniform vec3 attenuations[max_lights];
 uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
@@ -34,6 +35,8 @@ void main(void){
     vec3 totalSpec = vec3(0f);
 
     for (int i = 0; i < max_lights; i++) {
+        float distanceToLight = length(toLightVectors[i]);
+        float attenuation = attenuations[i].x + attenuations[i].y * distanceToLight + attenuations[i].z * pow(distanceToLight, 2);
         vec3 unitLightVector = normalize(toLightVectors[i]);
 
         float nDotl = dot(unitNormal, unitLightVector);
@@ -47,8 +50,8 @@ void main(void){
         specularFactor = max(specularFactor, 0.0);
         float dampedFactor = pow(specularFactor, shineDamper);
 
-        totalDiffuse += brightness * lightColours[i];
-        totalSpec += dampedFactor * reflectivity * lightColours[i];
+        totalDiffuse += (brightness * lightColours[i]) / attenuation;
+        totalSpec += (dampedFactor * reflectivity * lightColours[i]) / attenuation;
     }
 
     totalDiffuse = max(totalDiffuse, 0.2);
@@ -57,6 +60,5 @@ void main(void){
     if (textureColour[3] < 0.5) discard;
 
     out_Color =  vec4(totalDiffuse, 1.0) * textureColour + vec4(totalSpec, 1.0);
-
     out_Color = mix(vec4(skyColour, 1), out_Color, visibility);
 }
