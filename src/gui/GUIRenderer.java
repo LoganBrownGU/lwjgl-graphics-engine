@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import renderEngine.Loader;
 import toolbox.Maths;
 
+import java.util.Collection;
 import java.util.List;
 
 public class GUIRenderer {
@@ -16,7 +17,7 @@ public class GUIRenderer {
     private final RawModel quad;
     private GUIShader shader;
 
-    public void render(List<GUITexture> guis) {
+    public void render(Collection<GUITexture> guis) {
         shader.start();
 
         GL30.glBindVertexArray(quad.getVaoID());

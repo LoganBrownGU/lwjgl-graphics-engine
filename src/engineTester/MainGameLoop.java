@@ -57,7 +57,7 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
         Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
-        MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/paris", camera);
+        MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/paris_low_res", camera);
         renderer.disableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
