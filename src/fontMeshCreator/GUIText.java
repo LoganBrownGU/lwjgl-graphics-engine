@@ -1,5 +1,6 @@
 package fontMeshCreator;
 
+import fontRendering.TextMaster;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -22,9 +23,9 @@ public class GUIText {
 	private float lineMaxSize;
 	private int numberOfLines;
 
-	private FontType font;
+	private final FontType font;
 
-	private boolean centerText = false;
+	private boolean centerText;
 
 	/**
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
@@ -66,7 +67,7 @@ public class GUIText {
 	 * Remove the text from the screen.
 	 */
 	public void remove() {
-		// remove text
+		TextMaster.removeText(this);
 	}
 
 	/**

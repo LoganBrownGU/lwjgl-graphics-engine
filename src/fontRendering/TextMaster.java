@@ -14,11 +14,14 @@ public class TextMaster {
     private static HashMap<FontType, ArrayList<GUIText>> texts = new HashMap<>();
     private static FontRenderer renderer;
 
-    public static void init(Loader loader) {
-        renderer = new FontRenderer();
+    public static void init(Loader loader, String vertex, String fragment) {
+        renderer = new FontRenderer(vertex, fragment);
         TextMaster.loader = loader;
     }
 
+    public static void render() {
+        renderer.render(texts);
+    }
     public static void loadText(GUIText text) {
         FontType font = text.getFont();
         TextMeshData data = font.loadText(text);

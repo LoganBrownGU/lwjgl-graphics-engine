@@ -1,10 +1,14 @@
 package engineTester;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import entities.*;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import models.TexturedModel;
@@ -32,6 +36,10 @@ public class MainGameLoop {
 
         DisplayManager.createDisplay("test", 1280, 720, true, false);
         Loader loader = new Loader();
+        TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
+        FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
+        GUIText text = new GUIText("sodhf d  dsifh sdiuf",1, font, new Vector2f(0, 0), 1, true);
+        TextMaster.loadText(text);
 
         TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
         staticModel.getTexture().setTransparent(true);
@@ -73,6 +81,7 @@ public class MainGameLoop {
         String[] effects = {"none"};
         PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
+
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
@@ -94,13 +103,14 @@ public class MainGameLoop {
 
             renderer.render(lights, camera);
             fbo.unbindFrameBuffer();
-
             PostProcessing.doPostProcessing(fbo.getColourTexture());
-
             guiRenderer.render(guis);
+            TextMaster.render();
+
             DisplayManager.updateDisplay();
         }
 
+        TextMaster.cleanUp();
         PostProcessing.cleanUp();
         fbo.cleanUp();
         renderer.cleanUp();
