@@ -2,26 +2,30 @@ package gui;
 
 import org.lwjgl.util.vector.Matrix4f;
 
+import org.lwjgl.util.vector.Vector3f;
 import shaders.ShaderProgram;
 
 public class GUIShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "assets/shaders/guiVertexShader.glsl";
-    private static final String FRAGMENT_FILE = "assets/shaders/guiFragmentShader.glsl";
-
     private int location_transformationMatrix;
+    private int location_colour;
 
-    public GUIShader() {
-        super(VERTEX_FILE, FRAGMENT_FILE);
+    public GUIShader(String vertex, String fragment) {
+        super(vertex, fragment);
     }
 
     public void loadTransformation(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);
     }
 
+    public void loadColour(Vector3f colour) {
+        if (colour != null) super.loadVector(location_colour, colour);
+    }
+
     @Override
     protected void getAllUniformLocations() {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
+        location_colour = super.getUniformLocation("colour");
     }
 
     @Override

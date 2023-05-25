@@ -27,6 +27,7 @@ import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import textures.ModelTexture;
+import toolbox.Colours;
 import toolbox.Maths;
 import toolbox.MousePicker;
 
@@ -74,8 +75,9 @@ public class MainGameLoop {
         float aspect = (float) Display.getWidth() / Display.getHeight();
         float guiSize = .03f;
         guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
+        guis.add(new GUITexture(Colours.RED, new Vector2f(0, .5f), new Vector2f(.1f, .1f)));
 
-        GUIRenderer guiRenderer = new GUIRenderer(loader);
+        GUIRenderer guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
 
         FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
         String[] effects = {"none"};
