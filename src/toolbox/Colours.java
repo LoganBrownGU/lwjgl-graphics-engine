@@ -10,4 +10,5 @@ public class Colours {
     public static final Vector3f YELLOW = new Vector3f(1, 1, 0);
     public static final Vector3f WHITE = new Vector3f(1, 1, 1);
 
+    public static final Vector3f DARK_GREY = new Vector3f(.2f, .2f, .2f);
 }

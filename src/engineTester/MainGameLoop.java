@@ -9,10 +9,10 @@ import entities.*;
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
 import fontRendering.TextMaster;
-import gui.GUIRenderer;
-import gui.GUITexture;
+import gui.*;
 import models.TexturedModel;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -75,7 +75,6 @@ public class MainGameLoop {
         float aspect = (float) Display.getWidth() / Display.getHeight();
         float guiSize = .03f;
         guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
-        guis.add(new GUITexture(Colours.RED, new Vector2f(0, .5f), new Vector2f(.1f, .1f)));
 
         GUIRenderer guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
 
@@ -83,18 +82,26 @@ public class MainGameLoop {
         String[] effects = {"none"};
         PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
+        GUIElement.setFont(loader, "assets/fonts/arial");
+        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(0, 0), new Vector2f(1200, 100), "test", 0.01f);
+        button.setEvent(() -> System.out.println(":)"));
+        button.add();
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
-            if (Mouse.next() && !Mouse.getEventButtonState() && Mouse.getEventButton() == 0) System.out.println("dsfjk");
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
+            GUIMaster.checkEvents();
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
             fbo.bindFrameBuffer();
 
+            if (Keyboard.isKeyDown(Keyboard.KEY_P)) button.destroy();
+
             if (Mouse.isButtonDown(0)) {
                 for (Entity entity : entities) {
+                    if (entity.getPicker() == null) continue;
+
                     if (entity.getPicker().isIntersecting(mp.getCurrentRay(), camera.getPosition()))
                         System.out.println(entity);
                 }
@@ -108,6 +115,7 @@ public class MainGameLoop {
             PostProcessing.doPostProcessing(fbo.getColourTexture());
             guiRenderer.render(guis);
             TextMaster.render();
+            GUIMaster.render(guiRenderer);
 
             DisplayManager.updateDisplay();
         }
