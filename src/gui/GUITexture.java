@@ -3,7 +3,7 @@ package gui;
 import org.lwjgl.util.vector.Vector2f;
 
 public class GUITexture {
-    private int texture;
+    private final int texture;
     private Vector2f position;
     private Vector2f scale;
 

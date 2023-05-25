@@ -59,6 +59,14 @@ public class Loader {
         return new TextureData(width, height, buffer);
     }
 
+    public int loadToVAO(float[] positions, float[] textureCoords) {
+        int vaoID = createVAO();
+        storeDataInAttributeList(0, 2, positions);
+        storeDataInAttributeList(1, 2, textureCoords);
+        unbindVAO();
+        return vaoID;
+    }
+
     public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
