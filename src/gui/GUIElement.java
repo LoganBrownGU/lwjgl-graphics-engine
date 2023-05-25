@@ -60,16 +60,17 @@ public abstract class GUIElement {
         System.out.println(size);
 
         this.size = size;
-        this.text = new GUIText("", 1, font, position, 1, true);
-        this.text.setColour(foregroundColour.x, foregroundColour.y, foregroundColour.z);
-        TextMaster.loadText(text);
 
         texture = new GUITexture(backgroundColour, position, size);
     }
 
     public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String text, float border) {
         this(backgroundColour, foregroundColour, position, size);
-        this.text = new GUIText(text, 1, font, new Vector2f(position.x + border, position.y + border), size.x - 2 * border, true);
+        border /= Display.getWidth();
+        this.text = new GUIText(text, 1, font, new Vector2f(position.x, position.y + .5f), size.x - 2 * border, true);
+        this.text.setPosition(new Vector2f(this.text.getPosition().x, this.text.getPosition().y));
+        this.text.setColour(foregroundColour.x, foregroundColour.y, foregroundColour.z);
+        TextMaster.loadText(this.text);
     }
 
     public Vector3f getBackgroundColour() {

@@ -83,7 +83,7 @@ public class MainGameLoop {
         PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         GUIElement.setFont(loader, "assets/fonts/arial");
-        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(0, 0), new Vector2f(1200, 100), "test", 0.01f);
+        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(0, 0), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10);
         button.setEvent(() -> System.out.println(":)"));
         button.add();
 
@@ -113,9 +113,9 @@ public class MainGameLoop {
             renderer.render(lights, camera);
             fbo.unbindFrameBuffer();
             PostProcessing.doPostProcessing(fbo.getColourTexture());
-            guiRenderer.render(guis);
-            TextMaster.render();
             GUIMaster.render(guiRenderer);
+            TextMaster.render();
+            guiRenderer.render(guis);
 
             DisplayManager.updateDisplay();
         }

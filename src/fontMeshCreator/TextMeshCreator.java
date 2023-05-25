@@ -58,12 +58,12 @@ public class TextMeshCreator {
 	private TextMeshData createQuadVertices(GUIText text, List<Line> lines) {
 		text.setNumberOfLines(lines.size());
 		double curserX = 0f;
-		double curserY = 0f;
+		double curserY = text.isCentered() ? -lines.size() * text.getFontSize() * LINE_HEIGHT / 2 : 0;
 		List<Float> vertices = new ArrayList<Float>();
 		List<Float> textureCoords = new ArrayList<Float>();
 		for (Line line : lines) {
 			if (text.isCentered()) {
-				curserX = (line.getMaxLength() - line.getLineLength()) / 2;
+				curserX = 0.5f - line.getLineLength() / 2;
 			}
 			for (Word word : line.getWords()) {
 				for (Character letter : word.getCharacters()) {
