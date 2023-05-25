@@ -1,11 +1,21 @@
 package gui;
 
+import fontMeshCreator.FontType;
+import renderEngine.Loader;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class GUIMaster {
 
     private static final ArrayList<GUIElement> elements = new ArrayList<>();
     private static final ArrayList<GUITexture> guis = new ArrayList<>();
+
+    protected static FontType font;
+
+    public static void setFont(Loader loader, String font) {
+        GUIMaster.font = new FontType(loader.loadTexture(font + ".png"), new File(font + ".fnt"));
+    }
 
     public static void addElement(GUIElement element) {
         elements.add(element);

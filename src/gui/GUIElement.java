@@ -20,13 +20,7 @@ public abstract class GUIElement {
     private GUITexture texture;
     protected GUIText text;
 
-    protected static FontType font = null;
-
     private boolean clicking = false;
-
-    public static void setFont(Loader loader, String font) {
-        GUIElement.font = new FontType(loader.loadTexture(font + ".png"), new File(font + ".fnt"));
-    }
 
     public boolean wasClicked() {
         Vector2f mp = new Vector2f(((float) Mouse.getX() / Display.getWidth()) * 2  - 1, ((float) Mouse.getY() / Display.getHeight()) * 2 - 1);
@@ -54,10 +48,8 @@ public abstract class GUIElement {
         this.foregroundColour = foregroundColour;
         this.position = position;
 
-        System.out.println(size.x / Display.getWidth());
-        size.x = size.x / Display.getWidth();
-        size.y = size.y / Display.getHeight();
-        System.out.println(size);
+        size.x /= Display.getWidth();
+        size.y /= Display.getHeight();
 
         this.size = size;
 
@@ -67,7 +59,7 @@ public abstract class GUIElement {
     public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String text, float border) {
         this(backgroundColour, foregroundColour, position, size);
         border /= Display.getWidth();
-        this.text = new GUIText(text, 1, font, new Vector2f(position.x, position.y + .5f), size.x - 2 * border, true);
+        this.text = new GUIText(text, 1, GUIMaster.font, new Vector2f(position.x, position.y + .5f), size.x - 2 * border, true);
         this.text.setPosition(new Vector2f(this.text.getPosition().x, this.text.getPosition().y));
         this.text.setColour(foregroundColour.x, foregroundColour.y, foregroundColour.z);
         TextMaster.loadText(this.text);

@@ -57,70 +57,55 @@ public class TextMeshCreator {
 
 	private TextMeshData createQuadVertices(GUIText text, List<Line> lines) {
 		text.setNumberOfLines(lines.size());
-		double curserX = 0f;
-		double curserY = text.isCentered() ? -lines.size() * text.getFontSize() * LINE_HEIGHT / 2 : 0;
+		double cursorX = 0f;
+		double cursorY = text.isCentered() ? -lines.size() * text.getFontSize() * LINE_HEIGHT / 2 : 0;
 		List<Float> vertices = new ArrayList<Float>();
 		List<Float> textureCoords = new ArrayList<Float>();
 		for (Line line : lines) {
 			if (text.isCentered()) {
-				curserX = 0.5f - line.getLineLength() / 2;
+				cursorX = 0.5f - line.getLineLength() / 2;
 			}
 			for (Word word : line.getWords()) {
 				for (Character letter : word.getCharacters()) {
-					addVerticesForCharacter(curserX, curserY, letter, text.getFontSize(), vertices);
-					addTexCoords(textureCoords, letter.getxTextureCoord(), letter.getyTextureCoord(),
+					addVerticesForCharacter(cursorX, cursorY, letter, text.getFontSize(), vertices);
+					addCoords(textureCoords, letter.getxTextureCoord(), letter.getyTextureCoord(),
 							letter.getXMaxTextureCoord(), letter.getYMaxTextureCoord());
-					curserX += letter.getxAdvance() * text.getFontSize();
+					cursorX += letter.getxAdvance() * text.getFontSize();
 				}
-				curserX += metaData.getSpaceWidth() * text.getFontSize();
+				cursorX += metaData.getSpaceWidth() * text.getFontSize();
 			}
-			curserX = 0;
-			curserY += LINE_HEIGHT * text.getFontSize();
+			cursorX = 0;
+			cursorY += LINE_HEIGHT * text.getFontSize();
 		}		
 		return new TextMeshData(listToArray(vertices), listToArray(textureCoords));
 	}
 
-	private void addVerticesForCharacter(double curserX, double curserY, Character character, double fontSize,
+	private void addVerticesForCharacter(double cursorX, double cursorY, Character character, double fontSize,
 			List<Float> vertices) {
-		double x = curserX + (character.getxOffset() * fontSize);
-		double y = curserY + (character.getyOffset() * fontSize);
+		double x = cursorX + (character.getxOffset() * fontSize);
+		double y = cursorY + (character.getyOffset() * fontSize);
 		double maxX = x + (character.getSizeX() * fontSize);
 		double maxY = y + (character.getSizeY() * fontSize);
 		double properX = (2 * x) - 1;
 		double properY = (-2 * y) + 1;
 		double properMaxX = (2 * maxX) - 1;
 		double properMaxY = (-2 * maxY) + 1;
-		addVertices(vertices, properX, properY, properMaxX, properMaxY);
+		addCoords(vertices, properX, properY, properMaxX, properMaxY);
 	}
 
-	private static void addVertices(List<Float> vertices, double x, double y, double maxX, double maxY) {
-		vertices.add((float) x);
-		vertices.add((float) y);
-		vertices.add((float) x);
-		vertices.add((float) maxY);
-		vertices.add((float) maxX);
-		vertices.add((float) maxY);
-		vertices.add((float) maxX);
-		vertices.add((float) maxY);
-		vertices.add((float) maxX);
-		vertices.add((float) y);
-		vertices.add((float) x);
-		vertices.add((float) y);
-	}
-
-	private static void addTexCoords(List<Float> texCoords, double x, double y, double maxX, double maxY) {
-		texCoords.add((float) x);
-		texCoords.add((float) y);
-		texCoords.add((float) x);
-		texCoords.add((float) maxY);
-		texCoords.add((float) maxX);
-		texCoords.add((float) maxY);
-		texCoords.add((float) maxX);
-		texCoords.add((float) maxY);
-		texCoords.add((float) maxX);
-		texCoords.add((float) y);
-		texCoords.add((float) x);
-		texCoords.add((float) y);
+	private static void addCoords(List<Float> coords, double x, double y, double maxX, double maxY) {
+		coords.add((float) x);
+		coords.add((float) y);
+		coords.add((float) x);
+		coords.add((float) maxY);
+		coords.add((float) maxX);
+		coords.add((float) maxY);
+		coords.add((float) maxX);
+		coords.add((float) maxY);
+		coords.add((float) maxX);
+		coords.add((float) y);
+		coords.add((float) x);
+		coords.add((float) y);
 	}
 
 	

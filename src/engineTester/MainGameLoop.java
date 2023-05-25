@@ -82,7 +82,7 @@ public class MainGameLoop {
         String[] effects = {"none"};
         PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
-        GUIElement.setFont(loader, "assets/fonts/arial");
+        GUIMaster.setFont(loader, "assets/fonts/arial");
         Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(0, 0), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10);
         button.setEvent(() -> System.out.println(":)"));
         button.add();
