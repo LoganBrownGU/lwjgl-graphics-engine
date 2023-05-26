@@ -46,21 +46,30 @@ public abstract class GUIElement {
     public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size) {
         this.backgroundColour = backgroundColour;
         this.foregroundColour = foregroundColour;
-        this.position = position;
+        this.position = new Vector2f(position);
+        this.position.x /= Display.getWidth();
+        this.position.x *= 2;
+        this.position.x -= 1;
+        this.position.y /= Display.getHeight();
+        this.position.y = 1 - this.position.y * 2;
+        System.out.println(this.position);
 
         size.x /= Display.getWidth();
         size.y /= Display.getHeight();
 
         this.size = size;
 
-        texture = new GUITexture(backgroundColour, position, size);
+        texture = new GUITexture(backgroundColour, this.position, size);
     }
 
+
+    // position and scale are given in number of pixels from top left
     public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String text, float border) {
         this(backgroundColour, foregroundColour, position, size);
         border /= Display.getWidth();
-        this.text = new GUIText(text, 1, GUIMaster.font, new Vector2f(position.x, position.y + .5f), size.x - 2 * border, true);
-        this.text.setPosition(new Vector2f(this.text.getPosition().x, this.text.getPosition().y));
+
+        this.text = new GUIText(text, 1, GUIMaster.font, new Vector2f(position.x / Display.getWidth() - .5f, position.y / Display.getHeight()), size.x - 2 * border, true);
+        //this.text.setPosition(new Vector2f(this.text.getPosition().x / 2, this.text.getPosition().y));
         this.text.setColour(foregroundColour.x, foregroundColour.y, foregroundColour.z);
         TextMaster.loadText(this.text);
     }
