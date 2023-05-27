@@ -14,7 +14,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public abstract class ShaderProgram {
 
-    public static final int MAX_LIGHTS = 10;
+    public static final int MAX_LIGHTS = 28;
 
     private final int programID;
     private final int vertexShaderID;

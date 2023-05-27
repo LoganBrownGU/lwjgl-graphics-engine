@@ -12,8 +12,16 @@ import java.util.ArrayList;
 
 public class StaticShader extends ShaderProgram {
 
+    private int location_num_lights;
+
     public StaticShader(String shaderPath) {
         super(shaderPath + "/vertexShader.glsl", shaderPath + "/fragmentShader.glsl");
+    }
+
+    @Override
+    protected void getAllUniformLocations() {
+        super.getAllUniformLocations();
+        location_num_lights = getUniformLocation("num_lights");
     }
 
     @Override
@@ -21,6 +29,10 @@ public class StaticShader extends ShaderProgram {
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoordinates");
         super.bindAttribute(2, "normal");
+    }
+
+    public void loadNumLights(int numLights) {
+        super.loadFloat(location_num_lights, (float) numLights);
     }
 
     public void loadFogEnabled(boolean fogEnabled) {

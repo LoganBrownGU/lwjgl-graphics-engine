@@ -1,6 +1,6 @@
 #version 400 core
 
-const int max_lights = 10;
+const int max_lights = 28;
 const int cel_num = 5;
 
 in vec2 pass_textureCoordinates;
@@ -17,6 +17,7 @@ uniform vec3 attenuations[max_lights];
 uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
+uniform float num_lights;
 
 float cel_shade(float brightness) {
     brightness *= cel_num;
@@ -34,7 +35,7 @@ void main(void){
     vec3 totalDiffuse = vec3(0f);
     vec3 totalSpec = vec3(0f);
 
-    for (int i = 0; i < max_lights; i++) {
+    for (int i = 0; i < max_lights && i < num_lights; i++) {
         float distanceToLight = length(toLightVectors[i]);
         float attenuation = attenuations[i].x + attenuations[i].y * distanceToLight + attenuations[i].z * pow(distanceToLight, 2);
         vec3 unitLightVector = normalize(toLightVectors[i]);

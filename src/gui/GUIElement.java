@@ -1,15 +1,11 @@
 package gui;
 
-import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
 import fontRendering.TextMaster;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import renderEngine.Loader;
-
-import java.io.File;
 
 public abstract class GUIElement {
     private Vector3f backgroundColour;
@@ -52,7 +48,6 @@ public abstract class GUIElement {
         this.position.x -= 1;
         this.position.y /= Display.getHeight();
         this.position.y = 1 - this.position.y * 2;
-        System.out.println(this.position);
 
         size.x /= Display.getWidth();
         size.y /= Display.getHeight();

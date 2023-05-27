@@ -2,7 +2,7 @@
 
 const float density = 0.007;
 const float gradient = 1.5;
-const int max_lights = 10;
+const int max_lights = 28;
 
 in vec3 position;
 in vec2 textureCoordinates;
@@ -20,6 +20,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPositions[max_lights];
 uniform bool fogEnabled;
+uniform float num_lights;
 
 void main(void){
     vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
@@ -29,7 +30,7 @@ void main(void){
     pass_textureCoordinates = textureCoordinates;
 
     surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
-    for (int i = 0; i < max_lights; i++)
+    for (int i = 0; i < max_lights && i < num_lights; i++)
         toLightVectors[i] = lightPositions[i] - worldPosition.xyz;
 
     toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
