@@ -7,9 +7,11 @@ public class ModelTexture {
 	private float shineDamper = 1;
 	private float reflectivity = 0;
 	private boolean hasTransparency = false;
+	private boolean isEmissive = false;
 	
-	public ModelTexture(int texture){
+	public ModelTexture(int texture, boolean isEmissive){
 		this.textureID = texture;
+		this.isEmissive = isEmissive;
 	}
 	
 	public int getID(){
@@ -38,5 +40,13 @@ public class ModelTexture {
 
 	public void setTransparent(boolean hasTransparency) {
 		this.hasTransparency = hasTransparency;
+	}
+
+	public boolean isEmissive() {
+		return isEmissive;
+	}
+
+	public void setEmissive(boolean emissive) {
+		isEmissive = emissive;
 	}
 }

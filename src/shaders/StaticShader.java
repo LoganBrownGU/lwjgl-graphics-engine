@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class StaticShader extends ShaderProgram {
 
     private int location_num_lights;
+    private int location_isEmissive;
 
     public StaticShader(String shaderPath) {
         super(shaderPath + "/vertexShader.glsl", shaderPath + "/fragmentShader.glsl");
@@ -22,6 +23,7 @@ public class StaticShader extends ShaderProgram {
     protected void getAllUniformLocations() {
         super.getAllUniformLocations();
         location_num_lights = getUniformLocation("num_lights");
+        location_isEmissive = getUniformLocation("isEmissive");
     }
 
     @Override
@@ -29,6 +31,10 @@ public class StaticShader extends ShaderProgram {
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoordinates");
         super.bindAttribute(2, "normal");
+    }
+
+    public void loadIsEmissive(boolean isEmissive) {
+        super.loadBoolean(location_isEmissive, isEmissive);
     }
 
     public void loadNumLights(int numLights) {

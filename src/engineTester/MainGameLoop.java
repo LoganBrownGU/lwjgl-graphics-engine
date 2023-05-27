@@ -35,15 +35,16 @@ public class MainGameLoop {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay("test", 1280, 720, true);
+        DisplayManager.createDisplay("test", 1280, 720, false);
         Loader loader = new Loader();
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
         GUIText text = new GUIText("sodhf d  dsifh sdiuf",1, font, new Vector2f(0, 0), 1, true);
         TextMaster.loadText(text);
 
-        TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
+        TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), false));
         staticModel.getTexture().setTransparent(true);
+        TexturedModel emissiveModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), true));
 
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
@@ -52,9 +53,10 @@ public class MainGameLoop {
             Entity e = new Entity(staticModel, pos, 0, 0, 0, 1, new SpherePicker(pos, 1));
             entities.add(e);
         }
-        entities.add(new Entity(staticModel, new Vector3f(0, 0, -200), 0, 0, 0, 1, null));
 
-        staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png")));
+        entities.add(new Entity(emissiveModel, new Vector3f(0, 0, -10), 0, 0, 0, 1, null));
+
+        staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), false));
 
         Vector3f pos = new Vector3f(5, 0, 5);
         Vector3f min = new Vector3f(pos.x - 1, pos.y, pos.z - 1);
@@ -78,9 +80,9 @@ public class MainGameLoop {
 
         GUIRenderer guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
 
-        FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
-        String[] effects = {"none"};
-        PostProcessing.init(loader, "assets/shaders/post_processing", effects);
+        //FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
+        //String[] effects = {"none"};
+        //PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         GUIMaster.setFont(loader, "assets/fonts/arial");
         Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(1100, 620), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10);
@@ -94,7 +96,7 @@ public class MainGameLoop {
             GUIMaster.checkEvents();
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-            fbo.bindFrameBuffer();
+            //fbo.bindFrameBuffer();
 
             if (Keyboard.isKeyDown(Keyboard.KEY_P)) button.destroy();
 
@@ -111,8 +113,8 @@ public class MainGameLoop {
                 renderer.processEntity(entity);
 
             renderer.render(lights, camera);
-            fbo.unbindFrameBuffer();
-            PostProcessing.doPostProcessing(fbo.getColourTexture());
+            //fbo.unbindFrameBuffer();
+            //PostProcessing.doPostProcessing(fbo.getColourTexture());
             GUIMaster.render(guiRenderer);
             TextMaster.render();
             guiRenderer.render(guis);
@@ -121,8 +123,8 @@ public class MainGameLoop {
         }
 
         TextMaster.cleanUp();
-        PostProcessing.cleanUp();
-        fbo.cleanUp();
+        //PostProcessing.cleanUp();
+        //fbo.cleanUp();
         renderer.cleanUp();
         guiRenderer.cleanUp();
         loader.cleanUp();
