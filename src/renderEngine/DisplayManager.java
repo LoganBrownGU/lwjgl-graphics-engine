@@ -3,6 +3,9 @@ package renderEngine;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.DisplayMode;
+
+import java.awt.*;
 
 public class DisplayManager {
 
@@ -29,11 +32,31 @@ public class DisplayManager {
 
         try {
             if (!fullscreen) Display.setDisplayMode(new DisplayMode(width, height));
-            else Display.setFullscreen(true);
+            else {
+                DisplayMode[] modes = Display.getAvailableDisplayModes();
+                java.awt.DisplayMode defaultMode = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[1].getDisplayMode();
+                int refreshRate = defaultMode.getRefreshRate();
+                DisplayMode finalMode = null;
 
-            Display.create(new PixelFormat().withSamples(8), attribs);
+                // to future self: sorry
+                loop: for (int i = 0; i < 2; i++) {
+                    for (DisplayMode mode : modes) {
+                        if (width == mode.getWidth() && height == mode.getHeight() && (refreshRate == mode.getFrequency() || mode.getFrequency() == 60 && i == 1)) {
+                            finalMode = mode;
+                            System.out.println(mode);
+                            break loop;
+                        }
+                    }
+                }
+
+                if (finalMode == null) throw new RuntimeException("display with refresh rate or 60 not found :(");
+                else Display.setDisplayModeAndFullscreen(finalMode);
+            }
+
+            Display.create(new PixelFormat().withSamples(4), attribs);
             Display.setTitle(title);
             Display.setVSyncEnabled(vsyncEnabled);
+
             GL11.glEnable(GL13.GL_MULTISAMPLE);
 
             Mouse.create();
