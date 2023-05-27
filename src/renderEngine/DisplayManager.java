@@ -6,12 +6,23 @@ import org.lwjgl.opengl.*;
 
 public class DisplayManager {
 
-    public static final int FPS_CAP = 120;
+    public static int fpsLimit = 999;
 
     private static boolean vsyncEnabled = false;
 
-    public static void createDisplay(String title, int width, int height, boolean vsync, boolean fullscreen) {
-        vsyncEnabled = vsync;
+    public static void createDisplay(String title, int width, int height, boolean fullscreen) {
+        vsyncEnabled = true;
+        init(title, width, height, fullscreen);
+    }
+
+    public static void createDisplay(String title, int width, int height, int fpsLimit, boolean fullscreen) {
+        vsyncEnabled = false;
+        DisplayManager.fpsLimit = Math.min(fpsLimit, DisplayManager.fpsLimit);
+
+        init(title, width, height, fullscreen);
+    }
+
+    private static void init(String title, int width, int height, boolean fullscreen) {
         ContextAttribs attribs = new ContextAttribs(3, 2)
                 .withForwardCompatible(true)
                 .withProfileCore(true);
@@ -22,7 +33,7 @@ public class DisplayManager {
 
             Display.create(new PixelFormat().withSamples(8), attribs);
             Display.setTitle(title);
-            Display.setVSyncEnabled(vsync);
+            Display.setVSyncEnabled(vsyncEnabled);
             GL11.glEnable(GL13.GL_MULTISAMPLE);
 
             Mouse.create();
@@ -35,7 +46,7 @@ public class DisplayManager {
 
     public static void updateDisplay() {
 
-        if (!vsyncEnabled) Display.sync(FPS_CAP);
+        if (!vsyncEnabled) Display.sync(fpsLimit);
 
         Display.update();
     }

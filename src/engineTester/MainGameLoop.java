@@ -35,7 +35,7 @@ public class MainGameLoop {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay("test", 1280, 720, false, true);
+        DisplayManager.createDisplay("test", 1280, 720, true);
         Loader loader = new Loader();
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
