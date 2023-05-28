@@ -1,6 +1,7 @@
 package gui;
 
 import fontMeshCreator.FontType;
+import fontRendering.TextMaster;
 import renderEngine.Loader;
 
 import java.io.File;
@@ -31,6 +32,14 @@ public class GUIMaster {
         for (GUIElement element : elements) {
             if (element instanceof Button && element.wasClicked()) ((Button) element).getEvent().onClick();
         }
+    }
+
+    public static void clear() {
+        for (GUIElement element : elements)
+            TextMaster.removeText(element.getText());
+
+        elements.clear();
+        guis.clear();
     }
 
     public static void render(GUIRenderer renderer) {

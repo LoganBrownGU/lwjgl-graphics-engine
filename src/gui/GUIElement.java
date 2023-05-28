@@ -132,4 +132,8 @@ public abstract class GUIElement {
     public GUITexture getTexture() {
         return texture;
     }
+
+    public GUIText getText() {
+        return text;
+    }
 }

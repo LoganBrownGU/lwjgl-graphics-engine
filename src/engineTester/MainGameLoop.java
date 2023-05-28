@@ -91,7 +91,6 @@ public class MainGameLoop {
         button.setEvent(() -> System.out.println(":)"));
         button.add();
 
-        int count = 0;
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
