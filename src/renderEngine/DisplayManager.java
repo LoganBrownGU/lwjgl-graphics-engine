@@ -9,19 +9,9 @@ import java.awt.*;
 
 public class DisplayManager {
 
-    public static int fpsLimit = 999;
-
-    private static boolean vsyncEnabled = false;
+    public static final int FPS_CAP = 60;
 
     public static void createDisplay(String title, int width, int height, boolean fullscreen) {
-        vsyncEnabled = true;
-        init(title, width, height, fullscreen);
-    }
-
-    public static void createDisplay(String title, int width, int height, int fpsLimit, boolean fullscreen) {
-        vsyncEnabled = false;
-        DisplayManager.fpsLimit = Math.min(fpsLimit, DisplayManager.fpsLimit);
-
         init(title, width, height, fullscreen);
     }
 
@@ -34,28 +24,23 @@ public class DisplayManager {
             if (!fullscreen) Display.setDisplayMode(new DisplayMode(width, height));
             else {
                 DisplayMode[] modes = Display.getAvailableDisplayModes();
-                java.awt.DisplayMode defaultMode = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[1].getDisplayMode();
-                int refreshRate = defaultMode.getRefreshRate();
                 DisplayMode finalMode = null;
-
-                // to future self: sorry
-                loop: for (int i = 0; i < 2; i++) {
-                    for (DisplayMode mode : modes) {
-                        if (width == mode.getWidth() && height == mode.getHeight() && (refreshRate == mode.getFrequency() || mode.getFrequency() == 60 && i == 1)) {
-                            finalMode = mode;
-                            System.out.println(mode);
-                            break loop;
-                        }
+                for (DisplayMode mode : modes) {
+                    if (width == mode.getWidth() && height == mode.getHeight() && mode.getFrequency() == 60) {
+                        finalMode = mode;
+                        System.out.println(mode);
+                        break;
                     }
                 }
 
-                if (finalMode == null) throw new RuntimeException("display with refresh rate or 60 not found :(");
+                if (finalMode == null)
+                    throw new RuntimeException("display setting with refresh rate of 60 not found :(");
                 else Display.setDisplayModeAndFullscreen(finalMode);
             }
 
             Display.create(new PixelFormat().withSamples(4), attribs);
             Display.setTitle(title);
-            Display.setVSyncEnabled(vsyncEnabled);
+            Display.setVSyncEnabled(false);
 
             GL11.glEnable(GL13.GL_MULTISAMPLE);
 
@@ -68,8 +53,7 @@ public class DisplayManager {
     }
 
     public static void updateDisplay() {
-
-        if (!vsyncEnabled) Display.sync(fpsLimit);
+        Display.sync(FPS_CAP);
 
         Display.update();
     }

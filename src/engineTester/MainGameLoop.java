@@ -19,6 +19,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -37,7 +38,7 @@ public class MainGameLoop {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay("test", 1000, 100, false);
+        DisplayManager.createDisplay("test", 2560, 1440, false);
         Loader loader = new Loader();
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
@@ -94,8 +95,8 @@ public class MainGameLoop {
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
-            camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             GUIMaster.checkEvents();
+            camera.move(renderer.getProjectionMatrix());
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
             //fbo.bindFrameBuffer();

@@ -15,33 +15,31 @@ public class Camera {
     private Vector3f rotation;
     private final float fov;
 
-    public void move(Matrix4f projectionMatrix, Matrix4f viewMatrix) {
+    public void move(Matrix4f projectionMatrix) {
+        Matrix4f viewMatrix = Maths.createViewMatrix(this);
 
-        Vector3f direction = null;
-        if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() /2, (float) Display.getHeight() /2), projectionMatrix, viewMatrix);
-            //position.z -= 0.2f;
+        Vector3f direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() /2, (float) Display.getHeight() /2), projectionMatrix, viewMatrix);
+        if (Keyboard.isKeyDown(Keyboard.KEY_W));
+        else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            Vector3f w = new Vector3f(-direction.z, 0, direction.x);
+            direction = (Vector3f) w.scale(1f / direction.length());
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+            Vector3f w = new Vector3f(direction.z, 0, -direction.x);
+            direction = (Vector3f) w.scale(1f / direction.length());
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            direction = (Vector3f) direction.negate();
+        } else direction = null;
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            //direction = mp.getCurrentRay();
+        if (direction != null) {
+            direction.scale(0.2f);
+            Vector3f.add(position, direction, position);
         }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_A))
-            direction = new Vector3f((float) Math.sin(Math.toRadians(rotation.y - 90)), 0, (float) -Math.cos(Math.toRadians(rotation.y - 90)));
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            position.z += 0.2f;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             position.y += 0.2f;
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
             position.y -= 0.2f;
 
-
-        if (direction != null) {
-            direction.scale(0.2f);
-            Vector3f.add(position, direction, position);
-        }
 
         if (Mouse.isButtonDown(2) || Mouse.isButtonDown(1)) {
             this.rotation.y += (float) Mouse.getDX() / 10;
