@@ -9,11 +9,22 @@ public class Entity {
 	private TexturedModel model;
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
-	private float scale;
+	private Vector3f scale;
 	private final Picker picker;
 
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale, Picker picker) {
+		this.model = model;
+		this.position = position;
+		this.rotX = rotX;
+		this.rotY = rotY;
+		this.rotZ = rotZ;
+		this.scale = new Vector3f(scale, scale, scale);
+		this.picker = picker;
+	}
+
+	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+				  Vector3f scale, Picker picker) {
 		this.model = model;
 		this.position = position;
 		this.rotX = rotX;
@@ -75,11 +86,14 @@ public class Entity {
 		this.rotZ = rotZ;
 	}
 
-	public float getScale() {
+	public Vector3f getScale() {
 		return scale;
 	}
 
 	public void setScale(float scale) {
+		this.scale = new Vector3f(scale, scale, scale);
+	}
+	public void setScale(Vector3f scale) {
 		this.scale = scale;
 	}
 

@@ -38,7 +38,7 @@ public class MainGameLoop {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay("test", 2560, 1440, false);
+        DisplayManager.createDisplay("test", 1280, 720, true);
         Loader loader = new Loader();
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
@@ -53,7 +53,7 @@ public class MainGameLoop {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             Vector3f pos = new Vector3f(random.nextFloat() * 30 - 15, 0, random.nextFloat() * -30);
-            Entity e = new Entity(staticModel, pos, 0, 0, 0, 1, new SpherePicker(pos, 1));
+            Entity e = new Entity(staticModel, pos, 0, 0, 0, new Vector3f(1, random.nextFloat(5), 1), new SpherePicker(pos, 1));
             entities.add(e);
         }
 
@@ -61,7 +61,7 @@ public class MainGameLoop {
 
         staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), false));
 
-        Vector3f pos = new Vector3f(5, 0, 5);
+        Vector3f pos = new Vector3f();
         Vector3f min = new Vector3f(pos.x - 1, pos.y, pos.z - 1);
         Vector3f max = new Vector3f(pos.x + 1, pos.y, pos.z + 1);
         entities.add(new Entity(staticModel, pos, 0, 0, 0, 1, new AABBPicker(min, max)));
@@ -70,7 +70,7 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false));
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
-        Camera camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 70);
+        Camera camera = new Camera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/paris_low_res", camera);
         renderer.disableFog();
 
