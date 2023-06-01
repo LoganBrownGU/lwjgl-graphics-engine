@@ -4,20 +4,25 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
+import toolbox.Settings;
 
 import java.awt.*;
 
 public class DisplayManager {
 
-    public static int FPS_CAP = 60;
+    public static void createDisplay(String title) {
+        init(title, Settings.RES_X, Settings.RES_Y, Settings.FULLSCREEN_ENABLED);
+        Settings.FPS_CAP = 60;
+    }
 
     public static void createDisplay(String title, int width, int height, boolean fullscreen) {
         init(title, width, height, fullscreen);
+        Settings.FPS_CAP = 60;
     }
 
     public static void createDisplay(String title, int width, int height, boolean fullscreen, int fpsCap) {
         init(title, width, height, fullscreen);
-        DisplayManager.FPS_CAP = fpsCap;
+        Settings.FPS_CAP = fpsCap;
     }
 
     private static void init(String title, int width, int height, boolean fullscreen) {
@@ -43,9 +48,9 @@ public class DisplayManager {
                 else Display.setDisplayModeAndFullscreen(finalMode);
             }
 
-            Display.create(new PixelFormat().withSamples(4), attribs);
+            Display.create(new PixelFormat().withSamples(Settings.MSAA_LEVEL), attribs);
             Display.setTitle(title);
-            Display.setVSyncEnabled(false);
+            Display.setVSyncEnabled(Settings.VSYNC_ENABLED);
 
             GL11.glEnable(GL13.GL_MULTISAMPLE);
 
@@ -58,7 +63,7 @@ public class DisplayManager {
     }
 
     public static void updateDisplay() {
-        Display.sync(FPS_CAP);
+        Display.sync(Settings.FPS_CAP);
 
         Display.update();
     }

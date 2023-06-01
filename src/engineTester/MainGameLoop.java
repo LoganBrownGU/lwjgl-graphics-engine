@@ -33,11 +33,13 @@ import textures.ModelTexture;
 import toolbox.Colours;
 import toolbox.Maths;
 import toolbox.MousePicker;
+import toolbox.Settings;
 
 public class MainGameLoop {
 
     public static void main(String[] args) {
 
+        Settings.updateSettings("assets/settings.cfg");
         DisplayManager.createDisplay("test", 1280, 720, true);
         Loader loader = new Loader();
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
