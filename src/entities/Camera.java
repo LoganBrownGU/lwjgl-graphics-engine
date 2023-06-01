@@ -7,7 +7,6 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import toolbox.Maths;
-import toolbox.MousePicker;
 
 public class Camera {
 

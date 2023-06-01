@@ -9,10 +9,15 @@ import java.awt.*;
 
 public class DisplayManager {
 
-    public static final int FPS_CAP = 60;
+    public static int FPS_CAP = 60;
 
     public static void createDisplay(String title, int width, int height, boolean fullscreen) {
         init(title, width, height, fullscreen);
+    }
+
+    public static void createDisplay(String title, int width, int height, boolean fullscreen, int fpsCap) {
+        init(title, width, height, fullscreen);
+        DisplayManager.FPS_CAP = fpsCap;
     }
 
     private static void init(String title, int width, int height, boolean fullscreen) {
