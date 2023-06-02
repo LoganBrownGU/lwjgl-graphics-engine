@@ -26,7 +26,7 @@ public class GUIMaster {
     private static final ArrayList<GUITexture> guis = new ArrayList<>();
     protected static FontType font;
 
-    private static ArrayList<Element> readComponents(String path) {
+    private static Document readDocument(String path) {
         Document doc;
 
         try {
@@ -37,6 +37,11 @@ public class GUIMaster {
             throw new RuntimeException(path + " not found");
         }
 
+        return doc;
+    }
+
+    private static ArrayList<Element> readComponents(String path) {
+        Document doc = readDocument(path);
         Element root = doc.getDocumentElement();
         root.normalize();
 
@@ -51,6 +56,11 @@ public class GUIMaster {
         }
 
         return componentElements;
+    }
+
+    private static String getGroupID(String path) {
+        Document doc = readDocument(path);
+        return doc.getDocumentElement().getAttribute("groupid");
     }
 
     public static Vector2f getSize(Element component) {
@@ -92,6 +102,7 @@ public class GUIMaster {
             if (guiElement.getSize().y == -1) // if height set to wrap-content
                 guiElement.setSize(new Vector2f(guiElement.getSize().x, guiElement.getText().getHeight() + 2 * (border / Display.getHeight())));
 
+            guiElement.setGroup(getGroupID(path));
             GUIMaster.addElement(guiElement);
         }
     }
@@ -134,5 +145,9 @@ public class GUIMaster {
             if (element.getId().equals(id)) return element;
 
         throw new RuntimeException("element with id " + id + " does not exist");
+    }
+
+    public static void removeGroup(String group) {
+        elements.removeIf(element -> element.getGroup().equals(group));
     }
 }

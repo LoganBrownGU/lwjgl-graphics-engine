@@ -14,8 +14,9 @@ public abstract class GUIElement {
     private ActionEvent actionEvent;
     private Vector2f position;
     private Vector2f size;
-    private GUITexture texture;
+    private final GUITexture texture;
     private final String id;
+    private String group = null;
 
     protected GUIText text;
 
@@ -153,5 +154,13 @@ public abstract class GUIElement {
 
     public String getId() {
         return id;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

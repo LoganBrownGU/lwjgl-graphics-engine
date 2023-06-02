@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<components offset="relative">
+<components groupid="main" offset="relative">
     <component type="textfield" position=".2,.5" width=".1" height="1" background="white" foreground="dark-grey" border="1"/>
     <component type="textfield" position=".8,.5" width=".1" height="1" background="red" foreground="dark-grey" border="1"/>
     <component id="whiteTitle" type="textfield" position=".2,.1" width=".1" height="wrap-content" foreground="red" background="blue" border="3">
