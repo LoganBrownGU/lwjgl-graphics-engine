@@ -40,7 +40,7 @@ public class MainGameLoop {
     public static void main(String[] args) {
 
         Settings.updateSettings("assets/settings.cfg");
-        DisplayManager.createDisplay("test", 1280, 720, true);
+        DisplayManager.createDisplay("test", 1280, 720, false);
         Loader loader = new Loader();
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
@@ -93,6 +93,8 @@ public class MainGameLoop {
         Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(1100, 620), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10);
         button.setEvent(() -> System.out.println(":)"));
         button.add();
+
+        GUIMaster.addGUI("assets/gui_config/main.xml");
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);

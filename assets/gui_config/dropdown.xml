@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<component width=".2" offset_x=".5" offset_y=".5f">
+    <item name="ROOK">rook</item>
+    <item name="BISHOP">bishop</item>
+    <item name="QUEEN">queen</item>
+    <item name="KNIGHT">knight</item>
+</component>
