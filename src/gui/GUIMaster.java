@@ -74,11 +74,19 @@ public class GUIMaster {
             float y = Float.parseFloat(component.getAttribute("position").split(",")[1]) * Display.getHeight();
             Vector2f position = new Vector2f(x, y);
             Vector2f size = getSize(component);
-            float border = Float.parseFloat(component.getAttribute("border"));
+            float border = 0;
+            if (!component.getAttribute("border").equals(""))
+                border = Float.parseFloat(component.getAttribute("border"));
             String text = component.getTextContent().strip();
+            String id = component.getAttribute("id");
+
+            if (component.getAttribute("type").equals(""))
+                throw new RuntimeException("component has no type in " + path);
 
             if (component.getAttribute("type").equals("textfield"))
-                guiElement = new TextField(background, foreground, position, size, text, border);
+                guiElement = new TextField(background, foreground, position, size, text, border, id);
+            else
+                throw new RuntimeException("component type invalid in " + path);
 
 
             if (guiElement.getSize().y == -1) // if height set to wrap-content
@@ -119,5 +127,12 @@ public class GUIMaster {
 
     public static void render(GUIRenderer renderer) {
         renderer.render(guis);
+    }
+
+    public static GUIElement getElementByID(String id) {
+        for (GUIElement element : elements)
+            if (element.getId().equals(id)) return element;
+
+        throw new RuntimeException("element with id " + id + " does not exist");
     }
 }

@@ -6,6 +6,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.w3c.dom.Text;
 
 public abstract class GUIElement {
     private Vector3f backgroundColour;
@@ -14,6 +15,8 @@ public abstract class GUIElement {
     private Vector2f position;
     private Vector2f size;
     private GUITexture texture;
+    private final String id;
+
     protected GUIText text;
 
     private boolean clicking = false;
@@ -39,7 +42,7 @@ public abstract class GUIElement {
         GUIMaster.removeElement(this);
     }
 
-    public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size) {
+    public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String id) {
         this.backgroundColour = backgroundColour;
         this.foregroundColour = foregroundColour;
         this.position = new Vector2f(position);
@@ -53,18 +56,18 @@ public abstract class GUIElement {
         size.y /= Display.getHeight();
 
         this.size = size;
+        this.id = id;
 
         texture = new GUITexture(backgroundColour, this.position, size);
     }
 
 
     // position and scale are given in number of pixels from top left
-    public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String text, float border) {
-        this(backgroundColour, foregroundColour, position, size);
+    public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String text, float border, String id) {
+        this(backgroundColour, foregroundColour, position, size, id);
         border /= Display.getWidth();
 
         this.text = new GUIText(text, 1, GUIMaster.font, new Vector2f(position.x / Display.getWidth() - .5f, position.y / Display.getHeight()), size.x - 2 * border, true);
-        //this.text.setPosition(new Vector2f(this.text.getPosition().x / 2, this.text.getPosition().y));
         this.text.setColour(foregroundColour.x, foregroundColour.y, foregroundColour.z);
         TextMaster.loadText(this.text);
     }
@@ -127,7 +130,17 @@ public abstract class GUIElement {
     }
 
     public void setText(GUIText text) {
+        TextMaster.removeText(this.text);
         this.text = text;
+        TextMaster.loadText(this.text);
+    }
+
+    public void setText(String text) {
+        TextMaster.removeText(this.text);
+        this.text.setTextString(text);
+        TextMaster.loadText(this.text);
+
+        // todo update the size of the textfield if it is set to wrap-content
     }
 
     public GUITexture getTexture() {
@@ -136,5 +149,9 @@ public abstract class GUIElement {
 
     public GUIText getText() {
         return text;
+    }
+
+    public String getId() {
+        return id;
     }
 }

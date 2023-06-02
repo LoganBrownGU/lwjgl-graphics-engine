@@ -90,11 +90,12 @@ public class MainGameLoop {
         //PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         GUIMaster.setFont(loader, "assets/fonts/arial");
-        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(1100, 620), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10);
+        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(1100, 620), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10, "");
         button.setEvent(() -> System.out.println(":)"));
         button.add();
 
         GUIMaster.addGUI("assets/gui_config/main.xml");
+        GUIMaster.getElementByID("whiteTitle").setText("dfnids");
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
