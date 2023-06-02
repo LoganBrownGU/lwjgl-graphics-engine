@@ -58,7 +58,7 @@ public abstract class GUIElement {
     public GUIElement(Vector3f backgroundColour, Vector3f foregroundColour, Vector2f position, Vector2f size, String text, float border, String id) {
         this(backgroundColour, foregroundColour, position, size, id);
 
-        this.text = new GUIText(text, 1, GUIMaster.font, position, 1, true);
+        this.text = new GUIText(text, 1, GUIMaster.font, position, size.x - 2 * (border / Display.getWidth()), true);
         this.text.setColour(foregroundColour.x, foregroundColour.y, foregroundColour.z);
         TextMaster.loadText(this.text);
     }

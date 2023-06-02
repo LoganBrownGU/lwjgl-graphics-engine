@@ -69,7 +69,16 @@ public class GUIMaster {
         String heightVal = component.getAttribute("height");
         float height = heightVal.equals("wrap-content") ? -1 : Float.parseFloat(heightVal);
 
-        return new Vector2f(width * Display.getWidth(), height * Display.getHeight());
+        return new Vector2f(width, height);
+    }
+
+    public static Vector2f getPosition(Element component) {
+        //todo need to separate position x and y in xml, and read them in separately (so they can match parent)
+
+        float x = Float.parseFloat(component.getAttribute("position").split(",")[0]);
+        float y = Float.parseFloat(component.getAttribute("position").split(",")[1]);
+
+        return new Vector2f(x, y);
     }
 
     public static ArrayList<Element> getChildren(Element element) {
@@ -86,15 +95,15 @@ public class GUIMaster {
 
     public static void addGUIs(Element root, String group, GUIElement parent) {
         ArrayList<Element> children = getChildren(root);
+        Vector2f parentPosition = parent == null ? new Vector2f(0, 0) : parent.getPosition();
+        Vector2f parentSize = parent == null ? new Vector2f(0, 0) : parent.getSize();
 
         for (Element component : children) {
-            GUIElement guiElement = null;
+            GUIElement guiElement;
             Vector3f foreground = Colours.getColour(component.getAttribute("foreground"));
             Vector3f background = Colours.getColour(component.getAttribute("background"));
 
-            float x = Float.parseFloat(component.getAttribute("position").split(",")[0]) * Display.getWidth();
-            float y = Float.parseFloat(component.getAttribute("position").split(",")[1]) * Display.getHeight();
-            Vector2f position = new Vector2f(x, y);
+            Vector2f position = Vector2f.add(getPosition(component), parentPosition, null);
             Vector2f size = getSize(component);
             float border = 0;
             if (!component.getAttribute("border").equals(""))
@@ -116,6 +125,7 @@ public class GUIMaster {
 
             guiElement.setGroup(group);
             GUIMaster.addElement(guiElement);
+            addGUIs(component, group, guiElement);
         }
     }
 
@@ -123,7 +133,7 @@ public class GUIMaster {
         Document doc = readDocument(path);
         Element root = doc.getDocumentElement();
 
-        //addGUIs(root, root.getAttribute("groupid"));
+        addGUIs(root, root.getAttribute("groupid"), null);
 
         /*ArrayList<Element> components = readComponents(path);
 
@@ -164,7 +174,6 @@ public class GUIMaster {
     }
 
     public static void addElement(GUIElement element) {
-        // todo make all positioning relative
         elements.add(element);
         guis.add(element.getTexture());
     }
