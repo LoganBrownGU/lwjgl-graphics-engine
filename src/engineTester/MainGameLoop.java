@@ -12,26 +12,20 @@ import fontRendering.TextMaster;
 import gui.*;
 import models.TexturedModel;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import postProcessing.FBO;
-import postProcessing.PostProcessing;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import textures.ModelTexture;
 import toolbox.Colours;
-import toolbox.Maths;
 import toolbox.MousePicker;
 import toolbox.Settings;
 
@@ -90,12 +84,12 @@ public class MainGameLoop {
         //PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         GUIMaster.setFont(loader, "assets/fonts/arial");
-        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(1100, 620), new Vector2f(100, 100), "fdgsd fsdhfis sdf", 10, "");
+        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(.5f, .5f), new Vector2f(.5f, .05f), "fdgsd fsdhfis sdf", 10, "");
         button.setEvent(() -> System.out.println(":)"));
         button.add();
 
-        GUIMaster.addGUI("assets/gui_config/main.xml");
-        GUIMaster.getElementByID("whiteTitle").setText("dfnids");
+        GUIMaster.addFromFile("assets/gui_config/main.xml");
+        //GUIMaster.getElementByID("whiteTitle").setText("dfnids");
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);

@@ -84,4 +84,12 @@ public class Maths {
         return ray.normalise(null);
     }
 
+    public static Vector2f screenCoordsToGLCoords(Vector2f screenCoords) {
+        Vector2f glCoords = new Vector2f(screenCoords);
+        glCoords.y = -(glCoords.y * 2 - 1);
+        glCoords.x = glCoords.x * 2 - 1;
+
+        return  glCoords;
+    }
+
 }

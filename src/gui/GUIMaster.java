@@ -72,8 +72,60 @@ public class GUIMaster {
         return new Vector2f(width * Display.getWidth(), height * Display.getHeight());
     }
 
-    public static void addGUI(String path) {
-        ArrayList<Element> components = readComponents(path);
+    public static ArrayList<Element> getChildren(Element element) {
+        ArrayList<Element> children = new ArrayList<>();
+
+        NodeList nodeList = element.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE && ((Element) nodeList.item(i)).getTagName().equals("component"))
+                children.add((Element) nodeList.item(i));
+        }
+
+        return children;
+    }
+
+    public static void addGUIs(Element root, String group, GUIElement parent) {
+        ArrayList<Element> children = getChildren(root);
+
+        for (Element component : children) {
+            GUIElement guiElement = null;
+            Vector3f foreground = Colours.getColour(component.getAttribute("foreground"));
+            Vector3f background = Colours.getColour(component.getAttribute("background"));
+
+            float x = Float.parseFloat(component.getAttribute("position").split(",")[0]) * Display.getWidth();
+            float y = Float.parseFloat(component.getAttribute("position").split(",")[1]) * Display.getHeight();
+            Vector2f position = new Vector2f(x, y);
+            Vector2f size = getSize(component);
+            float border = 0;
+            if (!component.getAttribute("border").equals(""))
+                border = Float.parseFloat(component.getAttribute("border"));
+            String text = component.getTextContent().strip();
+            String id = component.getAttribute("id");
+
+            if (component.getAttribute("type").equals(""))
+                throw new RuntimeException("component has no type in " + group);
+
+            if (component.getAttribute("type").equals("textfield"))
+                guiElement = new TextField(background, foreground, position, size, text, border, id);
+            else
+                throw new RuntimeException("component type invalid in " + group);
+
+
+            if (guiElement.getSize().y == -1) // if height set to wrap-content
+                guiElement.setSize(new Vector2f(guiElement.getSize().x, guiElement.getText().getHeight() + 2 * (border / Display.getHeight())));
+
+            guiElement.setGroup(group);
+            GUIMaster.addElement(guiElement);
+        }
+    }
+
+    public static void addFromFile(String path) {
+        Document doc = readDocument(path);
+        Element root = doc.getDocumentElement();
+
+        //addGUIs(root, root.getAttribute("groupid"));
+
+        /*ArrayList<Element> components = readComponents(path);
 
         for (Element component : components) {
             GUIElement guiElement = null;
@@ -104,7 +156,7 @@ public class GUIMaster {
 
             guiElement.setGroup(getGroupID(path));
             GUIMaster.addElement(guiElement);
-        }
+        }*/
     }
 
     public static void setFont(Loader loader, String font) {
