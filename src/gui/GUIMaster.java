@@ -5,7 +5,6 @@ import fontRendering.TextMaster;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,9 +16,7 @@ import toolbox.Colours;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -62,7 +59,7 @@ public class GUIMaster {
         String heightVal = component.getAttribute("height");
         float height = heightVal.equals("wrap-content") ? -1 : Float.parseFloat(heightVal);
 
-        return new Vector2f(width, height);
+        return new Vector2f(width * Display.getWidth(), height * Display.getHeight());
     }
 
     public static void addGUI(String path) {
@@ -77,16 +74,16 @@ public class GUIMaster {
             float y = Float.parseFloat(component.getAttribute("position").split(",")[1]) * Display.getHeight();
             Vector2f position = new Vector2f(x, y);
             Vector2f size = getSize(component);
+            float border = Float.parseFloat(component.getAttribute("border"));
+            String text = component.getTextContent().strip();
 
-            if (component.getAttribute("type").equals("textfield")) {
-                float border = Float.parseFloat(component.getAttribute("border"));
-                String text = component.getTextContent().strip();
+            if (component.getAttribute("type").equals("textfield"))
                 guiElement = new TextField(background, foreground, position, size, text, border);
-            }
 
-            if (guiElement.getSize().y == -1) { // if height set to wrap-content
-                guiElement.setSize(new Vector2f(guiElement.getSize().x, guiElement.getText().getNumberOfLines()));
-            }
+
+            if (guiElement.getSize().y == -1) // if height set to wrap-content
+                guiElement.setSize(new Vector2f(guiElement.getSize().x, guiElement.getText().getHeight() + 2 * (border / Display.getHeight())));
+
             GUIMaster.addElement(guiElement);
         }
     }

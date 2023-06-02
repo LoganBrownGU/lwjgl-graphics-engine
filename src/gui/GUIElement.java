@@ -123,6 +123,7 @@ public abstract class GUIElement {
 
     public void setSize(Vector2f size) {
         this.size = size;
+        this.getTexture().setScale(size);
     }
 
     public void setText(GUIText text) {

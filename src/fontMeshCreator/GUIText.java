@@ -202,4 +202,8 @@ public class GUIText {
 	public void setCenterText(boolean centerText) {
 		this.centerText = centerText;
 	}
+
+	public float getHeight() {
+		return (float) (numberOfLines * fontSize * TextMeshCreator.LINE_HEIGHT);
+	}
 }
