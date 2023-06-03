@@ -40,41 +40,24 @@ public class GUIMaster {
         return doc;
     }
 
-    private static ArrayList<Element> readComponents(String path) {
-        Document doc = readDocument(path);
-        Element root = doc.getDocumentElement();
-        root.normalize();
-
-        ArrayList<Element> componentElements = new ArrayList<>();
-
-        NodeList nodes = root.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node node = nodes.item(i);
-
-            if (node.getNodeType() == Node.ELEMENT_NODE && ((Element) node).getTagName().equals("component"))
-                componentElements.add((Element) node);
-        }
-
-        return componentElements;
-    }
-
-    private static String getGroupID(String path) {
-        Document doc = readDocument(path);
-        return doc.getDocumentElement().getAttribute("groupid");
-    }
-
-    public static Vector2f getSize(Element component) {
+    public static Vector2f getSize(Element component, GUIElement parent) {
         String widthVal = component.getAttribute("width");
-        float width = Float.parseFloat(widthVal);
+        float width = switch (widthVal) {
+            case "match-parent" -> parent.getSize().x;
+            default -> Float.parseFloat(widthVal);
+        };
+
         String heightVal = component.getAttribute("height");
-        float height = heightVal.equals("wrap-content") ? -1 : Float.parseFloat(heightVal);
+        float height = switch (heightVal) {
+            case "match-parent" -> parent.getSize().y;
+            case "wrap-content" -> -1;
+            default -> Float.parseFloat(heightVal);
+        };
 
         return new Vector2f(width, height);
     }
 
     public static Vector2f getPosition(Element component) {
-        //todo need to separate position x and y in xml, and read them in separately (so they can match parent)
-
         float x = Float.parseFloat(component.getAttribute("position").split(",")[0]);
         float y = Float.parseFloat(component.getAttribute("position").split(",")[1]);
 
@@ -86,7 +69,7 @@ public class GUIMaster {
 
         NodeList nodeList = element.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
-            if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE && ((Element) nodeList.item(i)).getTagName().equals("component"))
+            if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE)
                 children.add((Element) nodeList.item(i));
         }
 
@@ -100,23 +83,31 @@ public class GUIMaster {
 
         for (Element component : children) {
             GUIElement guiElement;
-            Vector3f foreground = Colours.getColour(component.getAttribute("foreground"));
-            Vector3f background = Colours.getColour(component.getAttribute("background"));
+
+            Vector3f foreground = Colours.WHITE;
+            if (!component.getAttribute("foreground").equals(""))
+                foreground = Colours.getColour(component.getAttribute("foreground"));
+
+
+            Vector3f background = Colours.BLACK;
+            if (!component.getAttribute("background").equals(""))
+                background = Colours.getColour(component.getAttribute("background"));
 
             Vector2f position = Vector2f.add(getPosition(component), parentPosition, null);
-            Vector2f size = getSize(component);
+            Vector2f size = getSize(component, parent);
             float border = 0;
             if (!component.getAttribute("border").equals(""))
                 border = Float.parseFloat(component.getAttribute("border"));
             String text = component.getTextContent().strip();
             String id = component.getAttribute("id");
 
-            if (component.getAttribute("type").equals(""))
-                throw new RuntimeException("component has no type in " + group);
+            String type = component.getTagName();
 
-            if (component.getAttribute("type").equals("textfield"))
+            if (type.equals(""))
+                throw new RuntimeException("component has no type in " + group);
+            if (type.equals("textfield"))
                 guiElement = new TextField(background, foreground, position, size, text, border, id);
-            else if (component.getAttribute("type").equals("button"))
+            else if (type.equals("button"))
                 guiElement = new Button(background, foreground, position, size, text, border, id);
             else
                 throw new RuntimeException("component type invalid in " + group);
