@@ -89,7 +89,12 @@ public class MainGameLoop {
         button.add();
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
-        //GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
+        GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
+        GUIMaster.getElementByID("bishop").setActionEvent(() -> {
+            GUIMaster.removeGroup("dropdown");
+            System.out.println("bishop");
+        });
+
         //GUIMaster.getElementByID("whiteTitle").setText("dfnids");
 
         while (!Display.isCloseRequested()) {

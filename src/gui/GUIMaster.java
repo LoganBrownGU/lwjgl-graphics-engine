@@ -40,16 +40,16 @@ public class GUIMaster {
         return doc;
     }
 
-    public static Vector2f getSize(Element component, GUIElement parent) {
+    public static Vector2f getSize(Element component, Vector2f parentSize) {
         String widthVal = component.getAttribute("width");
         float width = switch (widthVal) {
-            case "match-parent" -> parent.getSize().x;
+            case "match-parent" -> parentSize.x;
             default -> Float.parseFloat(widthVal);
         };
 
         String heightVal = component.getAttribute("height");
         float height = switch (heightVal) {
-            case "match-parent" -> parent.getSize().y;
+            case "match-parent" -> parentSize.y;
             case "wrap-content" -> -1;
             default -> Float.parseFloat(heightVal);
         };
@@ -57,14 +57,14 @@ public class GUIMaster {
         return new Vector2f(width, height);
     }
 
-    public static Vector2f getPosition(Element component) {
+    public static Vector2f getPosition(Element component, Vector2f parentPosition) {
         float x = Float.parseFloat(component.getAttribute("position").split(",")[0]);
         float y = Float.parseFloat(component.getAttribute("position").split(",")[1]);
 
-        return new Vector2f(x, y);
+        return Vector2f.add(parentPosition, new Vector2f(x, y), null);
     }
 
-    public static ArrayList<Element> getChildren(Element element) {
+    private static ArrayList<Element> getChildren(Element element) {
         ArrayList<Element> children = new ArrayList<>();
 
         NodeList nodeList = element.getChildNodes();
@@ -76,13 +76,27 @@ public class GUIMaster {
         return children;
     }
 
-    public static void addGUIs(Element root, String group, GUIElement parent) {
+    private static boolean hasChildren(Element element) {
+        NodeList children = element.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeType() == Node.ELEMENT_NODE) return true;
+        }
+
+        return false;
+    }
+
+    public static void addGUIs(Element root, String group, Vector2f parentPosition, Vector2f parentSize) {
         ArrayList<Element> children = getChildren(root);
-        Vector2f parentPosition = parent == null ? new Vector2f(0, 0) : parent.getPosition();
-        Vector2f parentSize = parent == null ? new Vector2f(0, 0) : parent.getSize();
 
         for (Element component : children) {
             GUIElement guiElement;
+
+            Vector2f position = getPosition(component, parentPosition);
+            Vector2f size = getSize(component, parentSize);
+            if (component.getTagName().equals("container")) {
+                addGUIs(component, group, position, size);
+                continue;
+            }
 
             Vector3f foreground = Colours.WHITE;
             if (!component.getAttribute("foreground").equals(""))
@@ -93,8 +107,6 @@ public class GUIMaster {
             if (!component.getAttribute("background").equals(""))
                 background = Colours.getColour(component.getAttribute("background"));
 
-            Vector2f position = Vector2f.add(getPosition(component), parentPosition, null);
-            Vector2f size = getSize(component, parent);
             float border = 0;
             if (!component.getAttribute("border").equals(""))
                 border = Float.parseFloat(component.getAttribute("border"));
@@ -102,6 +114,7 @@ public class GUIMaster {
             String id = component.getAttribute("id");
 
             String type = component.getTagName();
+            if (hasChildren(component)) text = "";
 
             if (type.equals(""))
                 throw new RuntimeException("component has no type in " + group);
@@ -118,7 +131,7 @@ public class GUIMaster {
 
             guiElement.setGroup(group);
             GUIMaster.addElement(guiElement);
-            addGUIs(component, group, guiElement);
+            addGUIs(component, group, position, size);
         }
     }
 
@@ -126,7 +139,7 @@ public class GUIMaster {
         Document doc = readDocument(path);
         Element root = doc.getDocumentElement();
 
-        addGUIs(root, root.getAttribute("groupid"), null);
+        addGUIs(root, root.getAttribute("groupid"), new Vector2f(), new Vector2f());
 
         /*ArrayList<Element> components = readComponents(path);
 

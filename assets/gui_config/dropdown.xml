@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <components groupid="dropdown">
-    <textfield position=".5,.1" width="0.1" height="0.25">
+    <container position=".5,.1" width="0.1" height="0.25">
         <button id="rook" position="0,0" width="match-parent" height="0.05" foreground="red" background="dark-grey">
             rook
         </button>
         <button id="queen" position="0,.05" width="match-parent" height="0.05" foreground="red" background="dark-grey">
             queen
         </button>
-    </textfield>
+        <button id="knight" position="0,.1" width="match-parent" height="0.05" foreground="red" background="dark-grey">
+            knight
+        </button>
+        <button id="bishop" position="0,.15" width="match-parent" height="0.05" foreground="red" background="dark-grey">
+            bishop
+        </button>
+    </container>
 </components>
