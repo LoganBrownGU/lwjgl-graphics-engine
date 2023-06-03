@@ -85,14 +85,14 @@ public class MainGameLoop {
 
         GUIMaster.setFont(loader, "assets/fonts/arial");
         Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(.5f, .5f), new Vector2f(.5f, .05f), "fdgsd fsdhfis sdf", 10, "");
-        button.setEvent(() -> System.out.println(":)"));
+        button.setEvent((element) -> System.out.println(":)"));
         button.add();
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
         GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
-        ((Button) GUIMaster.getElementByID("bishop")).setEvent(() -> {
-            GUIMaster.removeGroup("dropdown");
-            System.out.println("bishop");
+        GUIMaster.applyActionEventToGroup("dropdown", (element) -> {
+            System.out.println(element.getId());
+            GUIMaster.removeGroup(element.getGroup());
         });
 
         //GUIMaster.getElementByID("whiteTitle").setText("dfnids");

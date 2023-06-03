@@ -161,12 +161,17 @@ public class GUIMaster {
         // since an ActionEvent may alter the contents of elements, events should be serviced after
         // elements has been iterated through
         ArrayList<ActionEvent> events = new ArrayList<>();
+        ArrayList<GUIElement> guiElements = new ArrayList<>();
 
         for (GUIElement element : elements)
-            if (element instanceof Button && element.wasClicked()) events.add(((Button) element).getEvent());
+            if (element instanceof Button && element.wasClicked()) {
+                events.add(((Button) element).getEvent());
+                guiElements.add(element);
+            }
 
-        for (ActionEvent e : events)
-            e.onClick();
+        for (int i = 0; i < events.size(); i++)
+            events.get(i).onClick(guiElements.get(i));
+
     }
 
     public static void clear() {
@@ -189,7 +194,6 @@ public class GUIMaster {
     }
 
     public static void removeGroup(String group) {
-        System.out.println(group);
         ArrayList<GUIElement> elementsToRemove = new ArrayList<>();
 
         for (GUIElement element : elements)
@@ -197,5 +201,12 @@ public class GUIMaster {
 
         for (GUIElement element : elementsToRemove)
             removeElement(element);
+    }
+
+    public static void applyActionEventToGroup(String group, ActionEvent event) {
+        for (GUIElement element : elements) {
+            if (element.getGroup().equals(group) && element instanceof Button)
+                ((Button) element).setEvent(event);
+        }
     }
 }
