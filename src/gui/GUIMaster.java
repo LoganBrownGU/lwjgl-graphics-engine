@@ -116,6 +116,8 @@ public class GUIMaster {
 
             if (component.getAttribute("type").equals("textfield"))
                 guiElement = new TextField(background, foreground, position, size, text, border, id);
+            else if (component.getAttribute("type").equals("button"))
+                guiElement = new Button(background, foreground, position, size, text, border, id);
             else
                 throw new RuntimeException("component type invalid in " + group);
 

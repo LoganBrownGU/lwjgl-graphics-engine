@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <components groupid="dropdown">
-    <component></component>
+    <component type="button" id="rook" position=".5f,.1f" width=".05" height="0.05" foreground="red" background="dark-grey">rook</component>
+    <component type="button" id="queen" position=".5f,.15f" width=".05" height="0.05" foreground="red" background="dark-grey">queen</component>
 </components>

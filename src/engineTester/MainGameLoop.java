@@ -89,6 +89,7 @@ public class MainGameLoop {
         button.add();
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
+        GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
         //GUIMaster.getElementByID("whiteTitle").setText("dfnids");
 
         while (!Display.isCloseRequested()) {
