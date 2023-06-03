@@ -90,7 +90,7 @@ public class MainGameLoop {
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
         GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
-        GUIMaster.getElementByID("bishop").setActionEvent(() -> {
+        ((Button) GUIMaster.getElementByID("bishop")).setEvent(() -> {
             GUIMaster.removeGroup("dropdown");
             System.out.println("bishop");
         });

@@ -11,21 +11,20 @@ import org.w3c.dom.Text;
 public abstract class GUIElement {
     private Vector3f backgroundColour;
     private Vector3f foregroundColour;
-    private ActionEvent actionEvent;
     private Vector2f position;
     private Vector2f size;
     private final GUITexture texture;
     private final String id;
-    private String group = null;
+    private String group = "";
 
     protected GUIText text;
 
     private boolean clicking = false;
 
     public boolean wasClicked() {
-        Vector2f mp = new Vector2f(((float) Mouse.getX() / Display.getWidth()) * 2  - 1, ((float) Mouse.getY() / Display.getHeight()) * 2 - 1);
+        Vector2f mp = new Vector2f((float) Mouse.getX() / Display.getWidth(), 1 - (float) Mouse.getY() / Display.getHeight());
 
-        if (Mouse.isButtonDown(0) && !clicking && mp.x > position.x - size.x && mp.x < position.x + size.x && mp.y > position.y - size.y && mp.y < position.y + size.y) {
+        if (Mouse.isButtonDown(0) && !clicking && mp.x > position.x - size.x / 2 && mp.x < position.x + size.x / 2 && mp.y > position.y - size.y / 2 && mp.y < position.y + size.y / 2) {
             clicking = true;
             return true;
         }
@@ -77,14 +76,6 @@ public abstract class GUIElement {
 
     public void setForegroundColour(Vector3f foregroundColour) {
         this.foregroundColour = foregroundColour;
-    }
-
-    public ActionEvent getActionEvent() {
-        return actionEvent;
-    }
-
-    public void setActionEvent(ActionEvent actionEvent) {
-        this.actionEvent = actionEvent;
     }
 
     public Vector2f getPosition() {

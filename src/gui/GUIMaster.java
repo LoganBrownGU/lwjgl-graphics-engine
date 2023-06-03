@@ -140,39 +140,6 @@ public class GUIMaster {
         Element root = doc.getDocumentElement();
 
         addGUIs(root, root.getAttribute("groupid"), new Vector2f(), new Vector2f());
-
-        /*ArrayList<Element> components = readComponents(path);
-
-        for (Element component : components) {
-            GUIElement guiElement = null;
-            Vector3f foreground = Colours.getColour(component.getAttribute("foreground"));
-            Vector3f background = Colours.getColour(component.getAttribute("background"));
-
-            float x = Float.parseFloat(component.getAttribute("position").split(",")[0]) * Display.getWidth();
-            float y = Float.parseFloat(component.getAttribute("position").split(",")[1]) * Display.getHeight();
-            Vector2f position = new Vector2f(x, y);
-            Vector2f size = getSize(component);
-            float border = 0;
-            if (!component.getAttribute("border").equals(""))
-                border = Float.parseFloat(component.getAttribute("border"));
-            String text = component.getTextContent().strip();
-            String id = component.getAttribute("id");
-
-            if (component.getAttribute("type").equals(""))
-                throw new RuntimeException("component has no type in " + path);
-
-            if (component.getAttribute("type").equals("textfield"))
-                guiElement = new TextField(background, foreground, position, size, text, border, id);
-            else
-                throw new RuntimeException("component type invalid in " + path);
-
-
-            if (guiElement.getSize().y == -1) // if height set to wrap-content
-                guiElement.setSize(new Vector2f(guiElement.getSize().x, guiElement.getText().getHeight() + 2 * (border / Display.getHeight())));
-
-            guiElement.setGroup(getGroupID(path));
-            GUIMaster.addElement(guiElement);
-        }*/
     }
 
     public static void setFont(Loader loader, String font) {
@@ -190,9 +157,15 @@ public class GUIMaster {
     }
 
     public static void checkEvents() {
-        for (GUIElement element : elements) {
-            if (element instanceof Button && element.wasClicked()) ((Button) element).getEvent().onClick();
-        }
+        // since an ActionEvent may alter the contents of elements, events should be serviced after
+        // elements has been iterated through
+        ArrayList<ActionEvent> events = new ArrayList<>();
+
+        for (GUIElement element : elements)
+            if (element instanceof Button && element.wasClicked()) events.add(((Button) element).getEvent());
+
+        for (ActionEvent e : events)
+            e.onClick();
     }
 
     public static void clear() {
