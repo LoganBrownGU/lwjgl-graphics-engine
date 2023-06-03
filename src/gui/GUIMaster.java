@@ -154,6 +154,7 @@ public class GUIMaster {
     public static void removeElement(GUIElement element) {
         elements.remove(element);
         guis.remove(element.getTexture());
+        TextMaster.removeText(element.getText());
     }
 
     public static void checkEvents() {
@@ -188,6 +189,13 @@ public class GUIMaster {
     }
 
     public static void removeGroup(String group) {
-        elements.removeIf(element -> element.getGroup().equals(group));
+        System.out.println(group);
+        ArrayList<GUIElement> elementsToRemove = new ArrayList<>();
+
+        for (GUIElement element : elements)
+            if (element.getGroup().equals(group)) elementsToRemove.add(element);
+
+        for (GUIElement element : elementsToRemove)
+            removeElement(element);
     }
 }
