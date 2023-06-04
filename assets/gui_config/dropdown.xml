@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<components groupid="dropdown">
+<components groupid="promotion">
     <container position=".5,.1" width="0.1" height="0.25">
         <button id="rook" position="0,0" width="match-parent" height="0.05" foreground="red" background="dark-grey">
             rook

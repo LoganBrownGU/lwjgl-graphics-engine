@@ -90,10 +90,11 @@ public class MainGameLoop {
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
         GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
-        GUIMaster.applyActionEventToGroup("dropdown", (element) -> {
+        GUIMaster.applyActionEventToGroup("promotion", (element) -> {
             System.out.println(element.getId());
             GUIMaster.removeGroup(element.getGroup());
         });
+        GUIMaster.addFromFile("assets/gui_config/castling.xml");
 
         //GUIMaster.getElementByID("whiteTitle").setText("dfnids");
 

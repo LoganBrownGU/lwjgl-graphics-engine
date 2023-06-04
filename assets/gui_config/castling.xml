@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<components groupid="castling">
+    <textfield position=".5,.1" width=".2" height="wrap-content" foreground="white" background="dark-grey">
+        Would you like to castle?
+    </textfield>
+    <container position=".5,.15" width=".2" height=".05">
+        <button id="yes" width="0.1" position=".45,match-parent" height="match-parent" foreground="white" background="dark-grey">yes</button>
+        <button id="no" width="0.1" position=".55,match-parent" height="match-parent" foreground="white" background="dark-grey">no</button>
+    </container>
+</components>
