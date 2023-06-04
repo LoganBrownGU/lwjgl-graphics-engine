@@ -170,7 +170,8 @@ public class GUIMaster {
             }
 
         for (int i = 0; i < events.size(); i++)
-            events.get(i).onClick(guiElements.get(i));
+            if (events.get(i) != null)
+                events.get(i).onClick(guiElements.get(i));
 
     }
 
