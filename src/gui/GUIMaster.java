@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import renderEngine.Loader;
 import toolbox.Colours;
+import toolbox.FileHandler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,20 +26,6 @@ public class GUIMaster {
     private static final ArrayList<GUIElement> elements = new ArrayList<>();
     private static final ArrayList<GUITexture> guis = new ArrayList<>();
     protected static FontType font;
-
-    private static Document readDocument(String path) {
-        Document doc;
-
-        try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            doc = builder.parse(path);
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            e.printStackTrace();
-            throw new RuntimeException(path + " not found");
-        }
-
-        return doc;
-    }
 
     public static Vector2f getSize(Element component, Vector2f parentSize) {
         String widthVal = component.getAttribute("width");
@@ -136,7 +123,7 @@ public class GUIMaster {
     }
 
     public static void addFromFile(String path) {
-        Document doc = readDocument(path);
+        Document doc = FileHandler.readXML(path);
         Element root = doc.getDocumentElement();
 
         addGUIs(root, root.getAttribute("groupid"), new Vector2f(), new Vector2f());

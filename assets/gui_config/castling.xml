@@ -5,7 +5,7 @@
         Would you like to castle?
     </textfield>
     <container position=".5,.15" width=".2" height=".05">
-        <button id="yes" width="0.1" position=".45,match-parent" height="match-parent" foreground="white" background="dark-grey">yes</button>
-        <button id="no" width="0.1" position=".55,match-parent" height="match-parent" foreground="white" background="dark-grey">no</button>
+        <button id="yes" width="0.1" position=".45,0" height="match-parent" foreground="white" background="dark-grey">yes</button>
+        <button id="no" width="0.1" position=".55,0" height="match-parent" foreground="white" background="dark-grey">no</button>
     </container>
 </components>

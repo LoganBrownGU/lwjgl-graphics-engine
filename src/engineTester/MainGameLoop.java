@@ -31,6 +31,19 @@ import toolbox.Settings;
 
 public class MainGameLoop {
 
+    private static void pause() {
+        GUIMaster.addFromFile("assets/gui_config/pause_menu.xml");
+
+        ((Button) GUIMaster.getElementByID("return")).setEvent(element -> unPause());
+        ((Button) GUIMaster.getElementByID("endgame")).setEvent(guiElement -> System.out.println("fuidgfudykfg"));
+
+        ((Button) GUIMaster.getElementByID("endgame")).getEvent().onClick(null);
+    }
+
+    private static void unPause() {
+        System.out.println("unpause");
+    }
+
     public static void main(String[] args) {
 
         Settings.updateSettings("assets/settings.cfg");
@@ -89,14 +102,7 @@ public class MainGameLoop {
         button.add();
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
-        GUIMaster.addFromFile("assets/gui_config/dropdown.xml");
-        GUIMaster.applyActionEventToGroup("promotion", (element) -> {
-            System.out.println(element.getId());
-            GUIMaster.removeGroup(element.getGroup());
-        });
-        GUIMaster.addFromFile("assets/gui_config/castling.xml");
-
-        //GUIMaster.getElementByID("whiteTitle").setText("dfnids");
+        pause();
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);

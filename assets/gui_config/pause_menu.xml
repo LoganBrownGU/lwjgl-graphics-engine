@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<components groupid="pausemenu">
+    <container width=".2f" height="1" position=".5f,.1f">
+        <button id="savegame" position="0,0" width="match-parent" height=".05">save game</button>
+        <button id="graphics" position="0,.05" width="match-parent" height=".05">graphics</button>
+        <button id="return" position="0,.1" width="match-parent" height=".05">return to game</button>
+        <button id="endgame" position="0,.15" width="match-parent" height=".05" foreground="red">end game</button>
+    </container>
+</components>
