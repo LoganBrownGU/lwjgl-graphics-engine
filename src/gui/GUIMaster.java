@@ -9,16 +9,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import renderEngine.Loader;
 import toolbox.Colours;
 import toolbox.FileHandler;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GUIMaster {
@@ -51,18 +46,6 @@ public class GUIMaster {
         return Vector2f.add(parentPosition, new Vector2f(x, y), null);
     }
 
-    private static ArrayList<Element> getChildren(Element element) {
-        ArrayList<Element> children = new ArrayList<>();
-
-        NodeList nodeList = element.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE)
-                children.add((Element) nodeList.item(i));
-        }
-
-        return children;
-    }
-
     private static boolean hasChildren(Element element) {
         NodeList children = element.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
@@ -73,7 +56,7 @@ public class GUIMaster {
     }
 
     public static void addGUIs(Element root, String group, Vector2f parentPosition, Vector2f parentSize) {
-        ArrayList<Element> children = getChildren(root);
+        ArrayList<Element> children = FileHandler.getChildren(root);
 
         for (Element component : children) {
             GUIElement guiElement;

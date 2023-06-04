@@ -1,6 +1,9 @@
 package toolbox;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,6 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileHandler {
     public static Document readXML(String path) {
@@ -39,5 +43,17 @@ public class FileHandler {
         } catch (IOException | TransformerException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static ArrayList<Element> getChildren(Element element) {
+        ArrayList<Element> children = new ArrayList<>();
+
+        NodeList nodeList = element.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE)
+                children.add((Element) nodeList.item(i));
+        }
+
+        return children;
     }
 }
