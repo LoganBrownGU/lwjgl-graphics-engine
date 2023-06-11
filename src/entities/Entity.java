@@ -6,15 +6,15 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Entity {
 
-	private TexturedModel model;
+	private TexturedModel[] models;
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private Vector3f scale;
 	private final Picker picker;
 
-	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
-			float scale, Picker picker) {
-		this.model = model;
+	public Entity(TexturedModel[] models, Vector3f position, float rotX, float rotY, float rotZ,
+				  float scale, Picker picker) {
+		this.models = models;
 		this.position = position;
 		this.rotX = rotX;
 		this.rotY = rotY;
@@ -23,9 +23,9 @@ public class Entity {
 		this.picker = picker;
 	}
 
-	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+	public Entity(TexturedModel[] models, Vector3f position, float rotX, float rotY, float rotZ,
 				  Vector3f scale, Picker picker) {
-		this.model = model;
+		this.models = models;
 		this.position = position;
 		this.rotX = rotX;
 		this.rotY = rotY;
@@ -46,12 +46,12 @@ public class Entity {
 		this.rotZ += dz;
 	}
 
-	public TexturedModel getModel() {
-		return model;
+	public TexturedModel[] getModels() {
+		return models;
 	}
 
-	public void setModel(TexturedModel model) {
-		this.model = model;
+	public void setModels(TexturedModel[] models) {
+		this.models = models;
 	}
 
 	public Vector3f getPosition() {
