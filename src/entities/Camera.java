@@ -10,9 +10,9 @@ import toolbox.Maths;
 
 public class Camera {
 
-    private Vector3f position;
-    private Vector3f rotation;
-    private final float fov;
+    protected Vector3f position;
+    protected Vector3f rotation;
+    protected final float fov;
 
     public void move(Matrix4f projectionMatrix) {
         Matrix4f viewMatrix = Maths.createViewMatrix(this);
