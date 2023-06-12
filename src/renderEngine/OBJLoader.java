@@ -76,18 +76,32 @@ public class OBJLoader {
         List<Vector2f> textures = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
+        float[] textureArray, normalArray;
 
         try {
             parseVertices(vertices, textures, normals, fPath);
-            float[] textureArray = new float[vertices.size() * 2];
-            float[] normalArray = new float[vertices.size() * 3];
+            textureArray = new float[vertices.size() * 2];
+            normalArray = new float[vertices.size() * 3];
 
             parseFaces(textures, normals, indices, textureArray, normalArray, fPath);
         } catch (IOException e) {
             throw new RuntimeException("Error while reading " + fPath + ": " + e.getMessage());
         }
 
-        return null;
+        float[] verticesArray = new float[vertices.size() * 3];
+        int[] indicesArray = new int[indices.size()];
+
+        int vertexPointer = 0;
+        for (Vector3f vertex : vertices) {
+            verticesArray[vertexPointer++] = vertex.x;
+            verticesArray[vertexPointer++] = vertex.y;
+            verticesArray[vertexPointer++] = vertex.z;
+        }
+
+        for (int i = 0; i < indices.size(); i++)
+            indicesArray[i] = indices.get(i);
+
+        return loader.loadToVAO(verticesArray, textureArray, normalArray, indicesArray);
     }
 
     private static void processVertex(String[] vertexData, List<Integer> indices,
