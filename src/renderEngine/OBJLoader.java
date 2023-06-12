@@ -69,9 +69,9 @@ public class OBJLoader {
         br.close();
     }
 
+
+
     public static RawModel loadObjModel(String fPath, Loader loader) {
-
-
         List<Vector3f> vertices = new ArrayList<>();
         List<Vector2f> textures = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
