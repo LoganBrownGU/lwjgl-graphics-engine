@@ -59,7 +59,8 @@ public class MainGameLoop {
         TexturedModel emissiveModel = new TexturedModel(OBJLoader.loadObjModel("assets/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), true));
 
         List<Entity> entities = new ArrayList<>();
-        Random random = new Random();
+        OBJLoader.loadObjModel("assets/cube.obj", loader);
+        /*Random random = new Random();
         for (int i = 0; i < 5; i++) {
             Vector3f pos = new Vector3f(random.nextFloat() * 30 - 15, 0, random.nextFloat() * -30);
             Entity e = new Entity(staticModel, pos, 0, 0, 0, new Vector3f(1, random.nextFloat(5), 1), new SpherePicker(pos, 1));
@@ -73,7 +74,7 @@ public class MainGameLoop {
         Vector3f pos = new Vector3f();
         Vector3f min = new Vector3f(pos.x - 1, pos.y, pos.z - 1);
         Vector3f max = new Vector3f(pos.x + 1, pos.y, pos.z + 1);
-        entities.add(new Entity(staticModel, pos, 0, 0, 0, 1, new AABBPicker(min, max)));
+        entities.add(new Entity(staticModel, pos, 0, 0, 0, 1, new AABBPicker(min, max)));*/
 
         ArrayList<Light> lights = new ArrayList<>();
         lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false));
