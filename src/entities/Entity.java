@@ -8,28 +8,24 @@ public class Entity {
 
 	private TexturedModel model;
 	private Vector3f position;
-	private float rotX, rotY, rotZ;
+	private Vector3f rotation;
 	private Vector3f scale;
 	private final Picker picker;
 
-	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+	public Entity(TexturedModel model, Vector3f position, Vector3f rotation,
 				  float scale, Picker picker) {
 		this.model = model;
 		this.position = position;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+		this.rotation = rotation;
 		this.scale = new Vector3f(scale, scale, scale);
 		this.picker = picker;
 	}
 
-	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+	public Entity(TexturedModel model, Vector3f position, Vector3f rotation,
 				  Vector3f scale, Picker picker) {
 		this.model = model;
 		this.position = position;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+		this.rotation = rotation;
 		this.scale = scale;
 		this.picker = picker;
 	}
@@ -41,9 +37,13 @@ public class Entity {
 	}
 
 	public void increaseRotation(float dx, float dy, float dz) {
-		this.rotX += dx;
-		this.rotY += dy;
-		this.rotZ += dz;
+		this.rotation.x += dx;
+		this.rotation.y += dy;
+		this.rotation.z += dz;
+	}
+
+	public void increaseRotation(Vector3f increase) {
+		this.rotation = Vector3f.add(increase, this.rotation, null);
 	}
 
 	public TexturedModel getModel() {
@@ -63,27 +63,27 @@ public class Entity {
 	}
 
 	public float getRotX() {
-		return rotX;
+		return this.rotation.x;
 	}
 
 	public void setRotX(float rotX) {
-		this.rotX = rotX;
+		this.rotation.x = rotX;
 	}
 
 	public float getRotY() {
-		return rotY;
+		return this.rotation.y;
 	}
 
 	public void setRotY(float rotY) {
-		this.rotY = rotY;
+		this.rotation.y = rotY;
 	}
 
 	public float getRotZ() {
-		return rotZ;
+		return this.rotation.z;
 	}
 
 	public void setRotZ(float rotZ) {
-		this.rotZ = rotZ;
+		this.rotation.z = rotZ;
 	}
 
 	public Vector3f getScale() {
@@ -95,6 +95,14 @@ public class Entity {
 	}
 	public void setScale(Vector3f scale) {
 		this.scale = scale;
+	}
+
+	public Vector3f getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(Vector3f rotation) {
+		this.rotation = rotation;
 	}
 
 	public Picker getPicker() {
