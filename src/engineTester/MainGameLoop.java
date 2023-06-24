@@ -69,7 +69,7 @@ public class MainGameLoop {
 
         entities.add(new Entity(emissiveModel, new Vector3f(0, 0, -10), new Vector3f(), 1, null));
 
-        staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/plane.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), false));
+        staticModel = new TexturedModel(OBJLoader.loadObjModel("assets/ground.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), false));
 
         Vector3f pos = new Vector3f();
         Vector3f min = new Vector3f(pos.x - 1, pos.y, pos.z - 1);

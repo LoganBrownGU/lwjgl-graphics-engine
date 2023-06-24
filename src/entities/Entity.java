@@ -105,6 +105,12 @@ public class Entity {
 		this.rotation = rotation;
 	}
 
+	public void setRotation(float x, float y, float z) {
+		this.rotation.x = x;
+		this.rotation.y = y;
+		this.rotation.z = z;
+	}
+
 	public Picker getPicker() {
 		return picker;
 	}
