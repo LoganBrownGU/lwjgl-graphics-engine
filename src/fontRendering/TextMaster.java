@@ -14,8 +14,8 @@ public class TextMaster {
     private static HashMap<FontType, ArrayList<GUIText>> texts = new HashMap<>();
     private static FontRenderer renderer;
 
-    public static void init(Loader loader, String vertex, String fragment) {
-        renderer = new FontRenderer(vertex, fragment);
+    public static void init(Loader loader) {
+        renderer = new FontRenderer();
         TextMaster.loader = loader;
     }
 

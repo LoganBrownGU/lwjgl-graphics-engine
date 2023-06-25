@@ -9,8 +9,8 @@ public class FontShader extends ShaderProgram {
     private int location_colour;
     private int location_translation;
 
-    public FontShader(String vertex, String fragment) {
-        super(vertex, fragment);
+    public FontShader() {
+        super("font");
     }
 
     @Override

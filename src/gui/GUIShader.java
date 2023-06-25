@@ -10,8 +10,12 @@ public class GUIShader extends ShaderProgram {
     private int location_transformationMatrix;
     private int location_colour;
 
-    public GUIShader(String vertex, String fragment) {
-        super(vertex, fragment);
+    public GUIShader() {
+        super("gui");
+    }
+
+    public GUIShader(String fragmentName) {
+        super("gui", fragmentName);
     }
 
     public void loadTransformation(Matrix4f matrix) {

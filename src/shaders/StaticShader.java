@@ -2,8 +2,8 @@ package shaders;
 
 public class StaticShader extends ShaderProgram {
 
-    public StaticShader(String shaderPath) {
-        super(shaderPath + "/vertexShader.glsl", shaderPath + "/fragmentShader.glsl");
+    public StaticShader() {
+        super("default");
     }
 
     @Override

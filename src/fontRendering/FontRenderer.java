@@ -16,8 +16,8 @@ public class FontRenderer {
 
     private FontShader shader;
 
-    public FontRenderer(String vertex, String fragment) {
-        shader = new FontShader(vertex, fragment);
+    public FontRenderer() {
+        shader = new FontShader();
     }
 
     public void cleanUp() {

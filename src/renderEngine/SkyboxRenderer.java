@@ -69,7 +69,7 @@ public class SkyboxRenderer {
 
         cube = loader.loadToVAO(VERTICES, 3);
         textureID = loader.loadCubeMap(TEXTURE_FILES);
-        shader = new SkyboxShader("assets/shaders/skyboxVertexShader.glsl", "assets/shaders/skyboxFragmentShader.glsl");
+        shader = new SkyboxShader();
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();

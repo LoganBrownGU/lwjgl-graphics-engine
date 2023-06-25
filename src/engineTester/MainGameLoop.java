@@ -46,7 +46,7 @@ public class MainGameLoop {
         Settings.updateSettings("assets/settings.cfg");
         DisplayManager.createDisplay("test", 1280, 720, false);
         Loader loader = new Loader();
-        TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
+        TextMaster.init(loader);
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
         GUIText text = new GUIText("sodhf d  dsifh sdiuf",1, font, new Vector2f(0, 0), 1, true);
         TextMaster.loadText(text);
@@ -71,7 +71,7 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
         Camera camera = new Camera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
-        MasterRenderer renderer = new MasterRenderer("assets/shaders", "assets/textures/skybox/paris_low_res", camera);
+        MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/paris_low_res", camera);
         renderer.enableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
@@ -81,7 +81,7 @@ public class MainGameLoop {
         float guiSize = .03f;
         guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
 
-        GUIRenderer guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
+        GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         //FBO fbo = new FBO(Display.getWidth(), Display.getHeight(), FBO.DEPTH_RENDER_BUFFER);
         //String[] effects = {"none"};

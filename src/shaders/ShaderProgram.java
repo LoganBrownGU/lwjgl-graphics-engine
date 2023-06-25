@@ -19,10 +19,6 @@ import toolbox.Maths;
 
 public abstract class ShaderProgram {
 
-    /* todo rearrange shader loading so this constructor takes in a path to the shaders and each subclass of ShaderProgram
-       adds its own suffix
-    */
-
     public static final int MAX_LIGHTS = 28;
 
     private final int programID;
@@ -41,11 +37,26 @@ public abstract class ShaderProgram {
     protected int location_isEmissive;
     protected int location_numLights;
 
+    public static String SHADERS_PATH = "assets/shaders";
+
     private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
-    public ShaderProgram(String vertexFile, String fragmentFile) {
-        vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
-        fragmentShaderID = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
+
+    public ShaderProgram(String shaderName) {
+        vertexShaderID = loadShader(SHADERS_PATH + "/vertex/" + shaderName + ".glsl", GL20.GL_VERTEX_SHADER);
+        fragmentShaderID = loadShader(SHADERS_PATH + "/fragment/" + shaderName + ".glsl", GL20.GL_FRAGMENT_SHADER);
+        programID = GL20.glCreateProgram();
+        GL20.glAttachShader(programID, vertexShaderID);
+        GL20.glAttachShader(programID, fragmentShaderID);
+        bindAttributes();
+        GL20.glLinkProgram(programID);
+        GL20.glValidateProgram(programID);
+        getAllUniformLocations();
+    }
+
+    public ShaderProgram(String vertexName, String fragmentName) {
+        vertexShaderID = loadShader(SHADERS_PATH + "/vertex/" + vertexName + ".glsl", GL20.GL_VERTEX_SHADER);
+        fragmentShaderID = loadShader(SHADERS_PATH + "/fragment/" + fragmentName + ".glsl", GL20.GL_FRAGMENT_SHADER);
         programID = GL20.glCreateProgram();
         GL20.glAttachShader(programID, vertexShaderID);
         GL20.glAttachShader(programID, fragmentShaderID);

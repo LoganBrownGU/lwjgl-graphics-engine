@@ -7,7 +7,7 @@ public class TerrainShader extends ShaderProgram {
 
     }
 
-    public TerrainShader(String vertexFile, String fragmentFile) {
-        super("assets/shaders/terrainVertex.glsl", "assets/shaders/terrainFragment.glsl");
+    public TerrainShader() {
+        super("terrain");
     }
 }

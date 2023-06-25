@@ -61,12 +61,11 @@ public class GUIRenderer {
         solidShader.cleanUp();
     }
 
-    public GUIRenderer(Loader loader, String vertex) {
+    public GUIRenderer(Loader loader) {
         float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
         quad = loader.loadToVAO(positions, 2);
 
-        String fragment = vertex.substring(0, vertex.indexOf("/gui"));
-        textureShader = new GUIShader(vertex, fragment + "/guiFragmentShader.glsl");
-        solidShader = new GUIShader(vertex, fragment + "/solidGUIFragment.glsl");
+        textureShader = new GUIShader();
+        solidShader = new GUIShader("solidGui");
     }
 }

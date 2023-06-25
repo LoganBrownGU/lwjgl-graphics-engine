@@ -37,9 +37,9 @@ public class MasterRenderer {
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
 
-    public MasterRenderer(String shaderPath, String skyboxPath, Camera camera) {
-        this.shader = new StaticShader(shaderPath);
-        this.terrainShader = new TerrainShader("", "");
+    public MasterRenderer(String skyboxPath, Camera camera) {
+        this.shader = new StaticShader();
+        this.terrainShader = new TerrainShader();
 
         this.camera = camera;
         enableCulling();
