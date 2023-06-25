@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import entities.Terrain;
 import models.TexturedModel;
 
 import org.lwjgl.opengl.Display;
@@ -12,8 +13,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
 import org.lwjgl.util.vector.Vector3f;
+import shaders.ShaderProgram;
 import shaders.StaticShader;
-import skybox.SkyboxRenderer;
+import shaders.TerrainShader;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -25,22 +27,27 @@ public class MasterRenderer {
     private Camera camera;
 
     private Matrix4f projectionMatrix;
-    private StaticShader shader;
-    private EntityRenderer renderer;
-    private Vector3f skyColour = new Vector3f(.3f, .3f, .3f);
+    private final StaticShader shader;
+    private final EntityRenderer entityRenderer;
+    private final Vector3f skyColour = new Vector3f(.3f, .3f, .3f);
     private boolean fogEnabled = true;
-    private SkyboxRenderer skyboxRenderer;
-
+    private final SkyboxRenderer skyboxRenderer;
+    private TerrainRenderer terrainRenderer;
+    private TerrainShader terrainShader;
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
 
     public MasterRenderer(String shaderPath, String skyboxPath, Camera camera) {
-        shader = new StaticShader(shaderPath);
+        this.shader = new StaticShader(shaderPath);
+        this.terrainShader = new TerrainShader("", "");
+
         this.camera = camera;
         enableCulling();
         createProjectionMatrix();
-        renderer = new EntityRenderer(shader, projectionMatrix);
-        skyboxRenderer = new SkyboxRenderer(new Loader(), projectionMatrix, skyboxPath);
+
+        this.entityRenderer = new EntityRenderer(shader, projectionMatrix);
+        this.skyboxRenderer = new SkyboxRenderer(new Loader(), projectionMatrix, skyboxPath);
+        this.terrainRenderer = new TerrainRenderer(this.terrainShader, this.projectionMatrix);
     }
 
     public static void enableCulling() {
@@ -52,19 +59,31 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    public void render(ArrayList<Light> lights, Camera camera) {
-        shader.start();
+    public void prepareShader(ShaderProgram shaderProgram, List<Light> lights, Camera camera) {
+        shaderProgram.loadLights(lights);
+        shaderProgram.loadViewMatrix(camera);
+        shaderProgram.loadSkyColour(skyColour);
+        shaderProgram.loadFogEnabled(fogEnabled);
+        shaderProgram.loadNumLights(lights.size());
+    }
+
+    public void render(List<Terrain> terrains, ArrayList<Light> lights, Camera camera) {
         prepare();
-        shader.loadLights(lights);
-        shader.loadViewMatrix(camera);
-        shader.loadSkyColour(skyColour);
-        shader.loadFogEnabled(fogEnabled);
-        shader.loadNumLights(lights.size());
-        renderer.render(entities);
+        shader.start();
+        prepareShader(shader, lights, camera);
+        entityRenderer.render(entities);
         shader.stop();
+
+        terrainShader.start();
+        prepareShader(terrainShader, lights, camera);
+        terrainRenderer.render(terrains);
+        terrainShader.stop();
+
         skyboxRenderer.render(camera);
+
         entities.clear();
     }
+
     public void processEntity(Entity entity) {
         TexturedModel entityModel = entity.getModel();
         List<Entity> batch = entities.get(entityModel);
@@ -79,6 +98,7 @@ public class MasterRenderer {
 
     public void cleanUp() {
         shader.cleanUp();
+        terrainShader.cleanUp();
     }
 
     public void prepare() {

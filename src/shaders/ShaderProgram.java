@@ -4,15 +4,24 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
+import entities.Camera;
+import entities.Light;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import toolbox.Maths;
 
 public abstract class ShaderProgram {
+
+    /* todo rearrange shader loading so this constructor takes in a path to the shaders and each subclass of ShaderProgram
+       adds its own suffix
+    */
 
     public static final int MAX_LIGHTS = 28;
 
@@ -29,6 +38,8 @@ public abstract class ShaderProgram {
     protected int location_reflectivity;
     protected int location_skyColour;
     protected int location_fogEnabled;
+    protected int location_isEmissive;
+    protected int location_numLights;
 
     private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
@@ -53,6 +64,8 @@ public abstract class ShaderProgram {
         location_reflectivity = getUniformLocation("reflectivity");
         location_skyColour = getUniformLocation("skyColour");
         location_fogEnabled = getUniformLocation("fogEnabled");
+        location_numLights = getUniformLocation("num_lights");
+        location_isEmissive = getUniformLocation("isEmissive");
 
         location_lightPositions = new int[MAX_LIGHTS];
         location_lightColours = new int[MAX_LIGHTS];
@@ -113,6 +126,10 @@ public abstract class ShaderProgram {
         GL20.glUniform2f(location, vector.x, vector.y);
     }
 
+    public void loadProjectionMatrix(Matrix4f projection) {
+        loadMatrix(location_projectionMatrix, projection);
+    }
+
     private static int loadShader(String file, int type) {
         StringBuilder shaderSource = new StringBuilder();
         try {
@@ -135,6 +152,49 @@ public abstract class ShaderProgram {
             System.exit(-1);
         }
         return shaderID;
+    }
+    public void loadIsEmissive(boolean isEmissive) {
+        loadBoolean(location_isEmissive, isEmissive);
+    }
+
+    public void loadShineVariables(float damper, float reflectivity) {
+        loadFloat(location_shineDamper, damper);
+        loadFloat(location_reflectivity, reflectivity);
+    }
+
+    public void loadTransformationMatrix(Matrix4f matrix) {
+        loadMatrix(location_transformationMatrix, matrix);
+    }
+
+    public void loadNumLights(int numLights) {
+        this.loadFloat(location_numLights, (float) numLights);
+    }
+
+    public void loadFogEnabled(boolean fogEnabled) {
+        this.loadBoolean(location_fogEnabled, fogEnabled);
+    }
+
+    public void loadSkyColour(Vector3f skyColour) {
+        this.loadVector(location_skyColour, skyColour);
+    }
+
+    public void loadLights(List<Light> lights) {
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            if (i < lights.size()) {
+                this.loadVector(location_lightPositions[i], lights.get(i).getPosition());
+                this.loadVector(location_lightColours[i], lights.get(i).getColour());
+                this.loadVector(location_attenuations[i], lights.get(i).getAttenuation());
+            } else {
+                this.loadVector(location_lightPositions[i], new Vector3f(0,0,0));
+                this.loadVector(location_lightColours[i], new Vector3f(0,0,0));
+                this.loadVector(location_attenuations[i], new Vector3f(1,0,0));
+            }
+        }
+    }
+
+    public void loadViewMatrix(Camera camera) {
+        Matrix4f viewMatrix = Maths.createViewMatrix(camera);
+        this.loadMatrix(location_viewMatrix, viewMatrix);
     }
 
 }

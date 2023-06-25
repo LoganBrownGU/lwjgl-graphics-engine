@@ -1,4 +1,4 @@
-package skybox;
+package renderEngine;
 
 import entities.Camera;
 import models.RawModel;
@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
-import renderEngine.Loader;
+import shaders.SkyboxShader;
 
 public class SkyboxRenderer {
     private static final float SIZE = 500f;
