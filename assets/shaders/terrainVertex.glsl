@@ -27,7 +27,7 @@ void main(void){
     vec4 distanceToCamera = viewMatrix * worldPosition;
 
     gl_Position = projectionMatrix * distanceToCamera;
-    pass_textureCoordinates = textureCoordinates;
+    pass_textureCoordinates = textureCoordinates * 40;
     toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
 
     if (fogEnabled) {
