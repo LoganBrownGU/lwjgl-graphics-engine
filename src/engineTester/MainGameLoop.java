@@ -96,7 +96,7 @@ public class MainGameLoop {
         pause();
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(new Terrain(0, 0, new ModelTexture(loader.loadTexture("assets/test_texture.png"), false), OBJLoader.loadObjModel("assets/ground.obj", loader)));
+        terrains.add(new Terrain(0, 0, new ModelTexture(loader.loadTexture("assets/test_texture.png"), false), OBJLoader.loadObjModel("assets/map.obj", loader), 100));
 
 
         while (!Display.isCloseRequested()) {
