@@ -1,12 +1,14 @@
 package renderEngine;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
+import entities.Terrain;
 import models.RawModel;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import textures.TextureData;
+import toolbox.FileHandler;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
@@ -161,5 +163,10 @@ public class Loader {
         return buffer;
     }
 
+    public Terrain loadHeightMap(String path) {
+        float[][] data = FileHandler.readGreyscalePixels(path);
 
+
+        return null;
+    }
 }

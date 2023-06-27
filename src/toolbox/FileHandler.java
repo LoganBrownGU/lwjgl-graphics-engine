@@ -1,5 +1,6 @@
 package toolbox;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,9 +15,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FileHandler {
     public static Document readXML(String path) {
@@ -55,5 +58,35 @@ public class FileHandler {
         }
 
         return children;
+    }
+
+    public static float[][] readGreyscalePixels(String path) {
+        PNGDecoder decoder;
+        BufferedInputStream stream;
+
+        try {
+            stream = new BufferedInputStream(new FileInputStream(path));
+            decoder = new PNGDecoder(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error reading " + path + " heightmap");
+        }
+
+        int width = decoder.getWidth();
+        int height = decoder.getHeight();
+        ByteBuffer buffer = ByteBuffer.allocateDirect(3 * width * height);
+        try {
+            decoder.decode(buffer, width * 3, PNGDecoder.Format.RGB);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error reading " + path + " Could be bad format (should be 8bpc RGB)");
+        }
+
+        float[][] out = new float[height][width];
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+                out[i][j] = (float) (Math.pow(2, 24) / buffer.get(i * width + j));
+
+        return out;
     }
 }

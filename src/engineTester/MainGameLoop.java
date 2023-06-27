@@ -55,6 +55,8 @@ public class MainGameLoop {
         staticModel.getTexture().setTransparent(true);
         TexturedModel emissiveModel = new TexturedModel(OBJLoader.loadObjModel("assets/cube.obj", loader), new ModelTexture(loader.loadTexture("assets/test_texture.png"), true));
 
+        loader.loadHeightMap("assets/heightmaps/default.png");
+
         List<Entity> entities = new ArrayList<>();
         OBJLoader.loadObjModel("assets/cube.obj", loader);
         Random random = new Random();
