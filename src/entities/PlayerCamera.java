@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class PlayerCamera extends Camera {
 
-    private final float height = 4f;
+    private final float height = 1f;
 
     public void move(Matrix4f projectionMatrix, Terrain terrain) {
         super.move(projectionMatrix);

@@ -29,7 +29,7 @@ public class MasterRenderer {
     private Matrix4f projectionMatrix;
     private final StaticShader shader;
     private final EntityRenderer entityRenderer;
-    private final Vector3f skyColour = new Vector3f(.3f, .3f, .3f);
+    private final Vector3f skyColour = new Vector3f(.8f, .8f, .9f);
     private boolean fogEnabled = true;
     private final SkyboxRenderer skyboxRenderer;
     private TerrainRenderer terrainRenderer;

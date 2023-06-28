@@ -49,7 +49,7 @@ public class MainGameLoop {
         System.out.println(Maths.normalToTriangle(v1, v2, v3));
 
         Settings.updateSettings("assets/settings.cfg");
-        DisplayManager.createDisplay("test", 1280, 720, false);
+        DisplayManager.createDisplay("test", 1920, 1080, true);
         Loader loader = new Loader();
         TextMaster.init(loader);
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
@@ -65,7 +65,7 @@ public class MainGameLoop {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             Vector3f pos = new Vector3f(random.nextFloat() * 30 - 15, 0, random.nextFloat() * -30);
-            Entity e = new Entity(staticModel, pos, new Vector3f(0, 90, 0), new Vector3f(1, random.nextFloat(5), 1), new SpherePicker(pos, 1));
+            Entity e = new Entity(staticModel, pos, new Vector3f(0, 90, 0), 1, new SpherePicker(pos, 1));
             entities.add(e);
         }
 
@@ -76,8 +76,8 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
         PlayerCamera camera = new PlayerCamera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
-        MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/paris_low_res", camera);
-        renderer.disableFog();
+        MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/sea", camera);
+        renderer.enableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
 
@@ -93,15 +93,11 @@ public class MainGameLoop {
         //PostProcessing.init(loader, "assets/shaders/post_processing", effects);
 
         GUIMaster.setFont(loader, "assets/fonts/arial");
-        Button button = new Button(Colours.RED, Colours.WHITE, new Vector2f(.5f, .5f), new Vector2f(.5f, .05f), "fdgsd fsdhfis sdf", 10, "");
-        button.setEvent((element) -> System.out.println(":)"));
-        button.add();
-
-        GUIMaster.addFromFile("assets/gui_config/main.xml");
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 300f, 100, .4f));
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 600f, 100, 3f));
 
+        Mouse.setGrabbed(true);
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
@@ -111,8 +107,6 @@ public class MainGameLoop {
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
             //fbo.bindFrameBuffer();
-
-            if (Keyboard.isKeyDown(Keyboard.KEY_P)) button.destroy();
 
             if (Mouse.isButtonDown(0)) {
                 for (Entity entity : entities) {
