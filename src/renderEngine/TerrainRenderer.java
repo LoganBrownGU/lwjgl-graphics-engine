@@ -30,6 +30,7 @@ public class TerrainRenderer {
             prepareTerrain(terrain);
             loadModelMatrix(terrain);
 
+            ///GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, terrain.getModel().getVertexCount());
             GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.getModel().getVertexCount(),
                     GL11.GL_UNSIGNED_INT, 0);
 
@@ -44,6 +45,7 @@ public class TerrainRenderer {
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
+        MasterRenderer.disableCulling();
 
         ModelTexture texture = terrain.getTexture();
 

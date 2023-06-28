@@ -7,6 +7,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import textures.ModelTexture;
 import textures.TextureData;
 import toolbox.FileHandler;
 
@@ -15,6 +16,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Loader {
@@ -163,10 +165,50 @@ public class Loader {
         return buffer;
     }
 
-    public Terrain loadHeightMap(String path) {
-        float[][] data = FileHandler.readGreyscalePixels(path);
+    public Terrain loadHeightMap(String path, float spacing, float maxHeight) {
+        float[][] data = FileHandler.readPixels(path);
+        int height = data.length;
+        int width = data[0].length;
+        int numRows = data.length;
+        float[] vertices = new float[numRows * data[0].length * 3];
+        float[] normals = new float[vertices.length];
+        float[] textures = new float[numRows * data[0].length * 2];
+        ArrayList<Integer> indices = new ArrayList<>();
+        Arrays.fill(textures, 1);
+        for (int i = 1; i < normals.length; i+=3) normals[i] = 1;
 
+        for (float f : data[0])
+            if (f == Float.POSITIVE_INFINITY) throw new RuntimeException("bollocks");
 
-        return null;
+        // put vertices into array
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < width; j++) {
+                int idx = (width * i + j) * 3;
+                vertices[idx] = j * spacing;
+                vertices[idx + 1] = data[i][j] * maxHeight;
+                vertices[idx + 2] = i * spacing;
+
+                idx = (width * i + j) * 2;
+                textures[idx] = j * spacing * .005f;
+                textures[idx+1] = i * spacing * .005f;
+            }
+        }
+
+        for (int i = 0; i < numRows - 1; i++) {
+            for (int j = 0; j < width - 1; j++) {
+                indices.add(i * width + j);
+                indices.add((i+1) * width + j);
+                indices.add(i * width + j + 1);
+
+                indices.add(i * width + j + 1);
+                indices.add((i+1) * width + j);
+                indices.add((i+1) * width + j + 1);
+            }
+        }
+
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indicesArray.length; i++) indicesArray[i] = indices.get(i);
+
+        return new Terrain(0, 0, new ModelTexture(loadTexture("assets/test_texture.png"), false), loadToVAO(vertices, textures, normals, indicesArray), 1);
     }
 }
