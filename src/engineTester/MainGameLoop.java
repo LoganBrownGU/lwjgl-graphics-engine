@@ -101,7 +101,7 @@ public class MainGameLoop {
         pause();
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", .1f, 30, 5f));
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 300f, 30, 5f));
 
 
         while (!Display.isCloseRequested()) {

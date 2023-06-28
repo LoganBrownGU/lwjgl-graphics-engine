@@ -169,22 +169,23 @@ public class Loader {
         return buffer;
     }
 
-    public Terrain loadHeightMap(String path, String texturePath, float spacing, float maxHeight, float textureScale) {
+    public Terrain loadHeightMap(String path, String texturePath, float size, float maxHeight, float textureScale) {
         float[][] data = FileHandler.readPixels(path);
         int height = data.length;
         int width = data[0].length;
-        int numRows = data.length;
+        float spacing = size / Math.max(width, height);
 
         // storing vertices as vectors as well as array makes it easier to calculate normals
         ArrayList<Vector3f> vectorVertices = new ArrayList<>();
-        float[] vertices = new float[numRows * data[0].length * 3];
-        float[] textures = new float[numRows * data[0].length * 2];
+        float[] vertices = new float[width * height * 3];
+        float[] textures = new float[width * height * 2];
         ArrayList<Integer> indices = new ArrayList<>();
-        ArrayList<Float> normals = new ArrayList<>();
+        Vector3f[] normals = new Vector3f[vertices.length / 3];
         Arrays.fill(textures, 1);
+        for (int i = 0; i < normals.length; i++) normals[i] = new Vector3f();
 
         // put vertices into array
-        for (int i = 0; i < numRows; i++) {
+        for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int idx = (width * i + j) * 3;
                 Vector3f vertex = new Vector3f(j * spacing, data[i][j] * maxHeight - maxHeight / 2, i * spacing);
@@ -200,38 +201,40 @@ public class Loader {
         }
 
         // create indices and calculate normals for each plane
-        for (int i = 0; i < numRows - 1; i++) {
+        for (int i = 0; i < height - 1; i++) {
             for (int j = 0; j < width - 1; j++) {
                 int[] face = {i * width + j, (i+1) * width + j, i * width + j + 1};
                 indices.add(face[0]);
                 indices.add(face[1]);
                 indices.add(face[2]);
+
                 Vector3f normal = Maths.normalToTriangle(vectorVertices.get(face[0]), vectorVertices.get(face[1]), vectorVertices.get(face[2]));
-                normals.add(normal.x);
-                normals.add(normal.y);
-                normals.add(normal.z);
+                Vector3f.add(normals[face[0]], normal, normals[face[0]]);
+                Vector3f.add(normals[face[1]], normal, normals[face[1]]);
+                Vector3f.add(normals[face[2]], normal, normals[face[2]]);
 
                 face = new int[] {i * width + j + 1, (i + 1) * width + j, (i + 1) * width + j + 1};
                 indices.add(face[0]);
                 indices.add(face[1]);
                 indices.add(face[2]);
                 normal = Maths.normalToTriangle(vectorVertices.get(face[0]), vectorVertices.get(face[1]), vectorVertices.get(face[2]));
-                normals.add(normal.x);
-                normals.add(normal.y);
-                normals.add(normal.z);
+                Vector3f.add(normals[face[0]], normal, normals[face[0]]);
+                Vector3f.add(normals[face[1]], normal, normals[face[1]]);
+                Vector3f.add(normals[face[2]], normal, normals[face[2]]);
             }
-        }
-
-        for (int i = 0; i < ; i++) {
-            
         }
 
         int[] indicesArray = new int[indices.size()];
         for (int i = 0; i < indicesArray.length; i++) indicesArray[i] = indices.get(i);
-        float[] normalsArray = new float[normals.size()];
-        for (int i = 0; i < normalsArray.length; i++) normalsArray[i] = normals.get(i);
 
-
+        for (Vector3f v : normals)
+            v.normalise(null);
+        float[] normalsArray = new float[normals.length * 3];
+        for (int i = 0; i < normals.length; i++) {
+            normalsArray[i*3] = normals[i].x;
+            normalsArray[i*3 + 1] = normals[i].y;
+            normalsArray[i*3 + 2] = normals[i].z;
+        }
 
         Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), loadToVAO(vertices, textures, normalsArray, indicesArray), 1);
 
