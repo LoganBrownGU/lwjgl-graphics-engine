@@ -23,6 +23,7 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.*;
 import textures.ModelTexture;
 import toolbox.Colours;
+import toolbox.Maths;
 import toolbox.MousePicker;
 import toolbox.Settings;
 
@@ -42,6 +43,10 @@ public class MainGameLoop {
     }
 
     public static void main(String[] args) {
+        Vector3f v1 = new Vector3f(0, 0, 0);
+        Vector3f v2 = new Vector3f(1, 0, 0);
+        Vector3f v3 = new Vector3f(1, 0, 1);
+        System.out.println(Maths.normalToTriangle(v1, v2, v3));
 
         Settings.updateSettings("assets/settings.cfg");
         DisplayManager.createDisplay("test", 1280, 720, false);
@@ -96,8 +101,7 @@ public class MainGameLoop {
         pause();
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", .1f, 60));
-        //terrains.add(new Terrain(0, 0, new ModelTexture(loader.loadTexture("assets/test_texture.png"), false), OBJLoader.loadObjModel("assets/map.obj", loader), 40));
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", .1f, 30, 5f));
 
 
         while (!Display.isCloseRequested()) {

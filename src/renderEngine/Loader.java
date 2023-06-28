@@ -12,6 +12,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import textures.ModelTexture;
 import textures.TextureData;
 import toolbox.FileHandler;
+import toolbox.Maths;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
@@ -168,51 +169,71 @@ public class Loader {
         return buffer;
     }
 
-    public Terrain loadHeightMap(String path, float spacing, float maxHeight) {
+    public Terrain loadHeightMap(String path, String texturePath, float spacing, float maxHeight, float textureScale) {
         float[][] data = FileHandler.readPixels(path);
         int height = data.length;
         int width = data[0].length;
         int numRows = data.length;
+
+        // storing vertices as vectors as well as array makes it easier to calculate normals
+        ArrayList<Vector3f> vectorVertices = new ArrayList<>();
         float[] vertices = new float[numRows * data[0].length * 3];
-        float[] normals = new float[vertices.length];
         float[] textures = new float[numRows * data[0].length * 2];
         ArrayList<Integer> indices = new ArrayList<>();
+        ArrayList<Float> normals = new ArrayList<>();
         Arrays.fill(textures, 1);
-        for (int i = 1; i < normals.length; i+=3) normals[i] = 1;
-
-        for (float f : data[0])
-            if (f == Float.POSITIVE_INFINITY) throw new RuntimeException("bollocks");
 
         // put vertices into array
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < width; j++) {
                 int idx = (width * i + j) * 3;
-                vertices[idx] = j * spacing;
-                vertices[idx + 1] = data[i][j] * maxHeight - maxHeight / 2;
-                vertices[idx + 2] = i * spacing;
+                Vector3f vertex = new Vector3f(j * spacing, data[i][j] * maxHeight - maxHeight / 2, i * spacing);
+                vectorVertices.add(vertex);
+                vertices[idx] = vertex.x;
+                vertices[idx + 1] = vertex.y;
+                vertices[idx + 2] = vertex.z;
 
                 idx = (width * i + j) * 2;
-                textures[idx] = j * spacing * .005f;
-                textures[idx+1] = i * spacing * .005f;
+                textures[idx] = j * spacing * .005f * textureScale;
+                textures[idx+1] = i * spacing * .005f * textureScale;
             }
         }
 
+        // create indices and calculate normals for each plane
         for (int i = 0; i < numRows - 1; i++) {
             for (int j = 0; j < width - 1; j++) {
-                indices.add(i * width + j);
-                indices.add((i+1) * width + j);
-                indices.add(i * width + j + 1);
+                int[] face = {i * width + j, (i+1) * width + j, i * width + j + 1};
+                indices.add(face[0]);
+                indices.add(face[1]);
+                indices.add(face[2]);
+                Vector3f normal = Maths.normalToTriangle(vectorVertices.get(face[0]), vectorVertices.get(face[1]), vectorVertices.get(face[2]));
+                normals.add(normal.x);
+                normals.add(normal.y);
+                normals.add(normal.z);
 
-                indices.add(i * width + j + 1);
-                indices.add((i+1) * width + j);
-                indices.add((i+1) * width + j + 1);
+                face = new int[] {i * width + j + 1, (i + 1) * width + j, (i + 1) * width + j + 1};
+                indices.add(face[0]);
+                indices.add(face[1]);
+                indices.add(face[2]);
+                normal = Maths.normalToTriangle(vectorVertices.get(face[0]), vectorVertices.get(face[1]), vectorVertices.get(face[2]));
+                normals.add(normal.x);
+                normals.add(normal.y);
+                normals.add(normal.z);
             }
+        }
+
+        for (int i = 0; i < ; i++) {
+            
         }
 
         int[] indicesArray = new int[indices.size()];
         for (int i = 0; i < indicesArray.length; i++) indicesArray[i] = indices.get(i);
+        float[] normalsArray = new float[normals.size()];
+        for (int i = 0; i < normalsArray.length; i++) normalsArray[i] = normals.get(i);
 
-        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture("assets/test_texture.png"), false), loadToVAO(vertices, textures, normals, indicesArray), 1);
+
+
+        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), loadToVAO(vertices, textures, normalsArray, indicesArray), 1);
 
         terrain.setX(-width * spacing / 2);
         terrain.setZ(-height * spacing / 2);
