@@ -30,7 +30,7 @@ public class Camera {
         } else direction = null;
 
         if (direction != null) {
-            direction.scale(0.2f);
+            direction.scale(0.5f);
             Vector3f.add(position, direction, position);
         }
 

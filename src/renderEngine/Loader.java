@@ -236,7 +236,12 @@ public class Loader {
             normalsArray[i*3 + 2] = normals[i].z;
         }
 
-        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), loadToVAO(vertices, textures, normalsArray, indicesArray), 1);
+        float[][] heights = new float[height][width];
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+                heights[i][j] = data[i][j] * maxHeight - maxHeight / 2;
+
+        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), loadToVAO(vertices, textures, normalsArray, indicesArray), spacing, heights);
 
         terrain.setX(-width * spacing / 2);
         terrain.setZ(-height * spacing / 2);

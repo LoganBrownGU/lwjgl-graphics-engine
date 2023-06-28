@@ -33,7 +33,7 @@ public class MainGameLoop {
         GUIMaster.addFromFile("assets/gui_config/pause_menu.xml");
 
         ((Button) GUIMaster.getElementByID("return")).setEvent(element -> unPause());
-        ((Button) GUIMaster.getElementByID("endgame")).setEvent(guiElement -> System.out.println("fuidgfudykfg"));
+        ((Button) GUIMaster.getElementByID("endgame")).setEvent(guiElement -> System.out.print(""));
 
         ((Button) GUIMaster.getElementByID("endgame")).getEvent().onClick(null);
     }
@@ -75,7 +75,7 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false));
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
-        Camera camera = new Camera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
+        PlayerCamera camera = new PlayerCamera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/paris_low_res", camera);
         renderer.disableFog();
 
@@ -98,17 +98,16 @@ public class MainGameLoop {
         button.add();
 
         GUIMaster.addFromFile("assets/gui_config/main.xml");
-        pause();
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 300f, 30, 5f));
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 300f, 100, .4f));
 
 
         while (!Display.isCloseRequested()) {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
             GUIMaster.checkEvents();
-            camera.move(renderer.getProjectionMatrix());
+            camera.move(renderer.getProjectionMatrix(), terrains.get(0));
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
             //fbo.bindFrameBuffer();

@@ -2,7 +2,6 @@ package renderEngine;
 
 import entities.Terrain;
 import models.RawModel;
-import models.TexturedModel;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -69,7 +68,7 @@ public class TerrainRenderer {
 
     private void loadModelMatrix(Terrain terrain) {
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0, terrain.getZ()),
-                0, 0, 0, terrain.getScale());
+                0, 0, 0, new Vector3f(1, 1, 1));
         shader.loadTransformationMatrix(transformationMatrix);
     }
 
