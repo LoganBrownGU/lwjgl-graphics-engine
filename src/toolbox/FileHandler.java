@@ -1,5 +1,8 @@
 package toolbox;
 
+import ar.com.hjg.pngj.ImageLineInt;
+import ar.com.hjg.pngj.PngReader;
+import ar.com.hjg.pngj.PngReaderInt;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -59,9 +62,10 @@ public class FileHandler {
         return children;
     }
 
-    public static float[][] readPixels(String path) {
+    /*public static float[][] readPixels(String path) {
         PNGDecoder decoder;
         BufferedInputStream stream;
+        int depth = 4;
 
         try {
             stream = new BufferedInputStream(new FileInputStream(path));
@@ -73,9 +77,9 @@ public class FileHandler {
 
         int width = decoder.getWidth();
         int height = decoder.getHeight();
-        ByteBuffer buffer = ByteBuffer.allocateDirect(width * height);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * depth);
         try {
-            decoder.decode(buffer, width, PNGDecoder.Format.ALPHA);
+            decoder.decode(buffer, width, PNGDecoder.Format.RGBA);
             stream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,7 +100,20 @@ public class FileHandler {
             for (int j = 0; j < raw[i].length; j++)
                 data[i][j] = (float) raw[i][j] / 0xff;
 
-        System.out.println(Arrays.toString(data[0]));
+        return data;
+    }*/
+
+    public static float[][] readPixels(String path) {
+        PngReader decoder = new PngReaderInt(new File(path));
+        float[][] data = new float[decoder.imgInfo.rows][decoder.imgInfo.cols];
+
+        for (int i = 0; i < decoder.imgInfo.rows; i++) {
+            ImageLineInt line = (ImageLineInt) decoder.readRow();
+            int[] scanline = line.getScanline();
+
+            for (int j = 0; j < scanline.length; j++)
+                data[i][j] = (float) (scanline[j] / Math.pow(2, decoder.imgInfo.bitspPixel));
+        }
 
         return data;
     }

@@ -72,7 +72,7 @@ public class MainGameLoop {
 
         Camera camera = new Camera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
         MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/paris_low_res", camera);
-        renderer.enableFog();
+        renderer.disableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
 
@@ -96,7 +96,7 @@ public class MainGameLoop {
         pause();
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/greyscale.png", .1f, 10));
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", .1f, 60));
         //terrains.add(new Terrain(0, 0, new ModelTexture(loader.loadTexture("assets/test_texture.png"), false), OBJLoader.loadObjModel("assets/map.obj", loader), 40));
 
 

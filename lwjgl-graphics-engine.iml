@@ -11,5 +11,6 @@
     <orderEntry type="library" name="jar" level="project" />
     <orderEntry type="library" name="windows" level="project" />
     <orderEntry type="library" name="PNGDecoder" level="project" />
+    <orderEntry type="library" name="pngj-2.1.1" level="project" />
   </component>
 </module>

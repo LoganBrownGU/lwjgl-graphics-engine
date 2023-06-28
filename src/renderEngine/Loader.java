@@ -5,6 +5,8 @@ import entities.Terrain;
 import models.RawModel;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import textures.ModelTexture;
@@ -18,6 +20,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 public class Loader {
 
@@ -185,7 +188,7 @@ public class Loader {
             for (int j = 0; j < width; j++) {
                 int idx = (width * i + j) * 3;
                 vertices[idx] = j * spacing;
-                vertices[idx + 1] = data[i][j] * maxHeight;
+                vertices[idx + 1] = data[i][j] * maxHeight - maxHeight / 2;
                 vertices[idx + 2] = i * spacing;
 
                 idx = (width * i + j) * 2;
@@ -209,6 +212,10 @@ public class Loader {
         int[] indicesArray = new int[indices.size()];
         for (int i = 0; i < indicesArray.length; i++) indicesArray[i] = indices.get(i);
 
-        return new Terrain(0, 0, new ModelTexture(loadTexture("assets/test_texture.png"), false), loadToVAO(vertices, textures, normals, indicesArray), 1);
+        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture("assets/test_texture.png"), false), loadToVAO(vertices, textures, normals, indicesArray), 1);
+
+        terrain.setX(-width * spacing / 2);
+        terrain.setZ(-height * spacing / 2);
+        return terrain;
     }
 }
