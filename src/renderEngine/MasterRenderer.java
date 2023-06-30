@@ -22,14 +22,14 @@ import entities.Light;
 
 public class MasterRenderer {
     private static final float NEAR_PLANE = 0.1f;
-    private static final float FAR_PLANE = 1000;
+    private static final float FAR_PLANE = 2000;
 
     private Camera camera;
 
     private Matrix4f projectionMatrix;
     private final StaticShader shader;
     private final EntityRenderer entityRenderer;
-    private final Vector3f skyColour = new Vector3f(.8f, .8f, .9f);
+    private Vector3f skyColour = new Vector3f(.8f, .8f, .9f);
     private boolean fogEnabled = true;
     private final SkyboxRenderer skyboxRenderer;
     private TerrainRenderer terrainRenderer;
@@ -69,6 +69,9 @@ public class MasterRenderer {
 
     public void render(List<Terrain> terrains, ArrayList<Light> lights, Camera camera) {
         prepare();
+
+        skyboxRenderer.render(camera);
+
         shader.start();
         prepareShader(shader, lights, camera);
         entityRenderer.render(entities);
@@ -78,8 +81,6 @@ public class MasterRenderer {
         prepareShader(terrainShader, lights, camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
-
-        skyboxRenderer.render(camera);
 
         entities.clear();
     }
@@ -128,4 +129,8 @@ public class MasterRenderer {
 
     public void enableFog() { this.fogEnabled = true; }
     public void disableFog() { this.fogEnabled = false; }
+
+    public void setSkyColour(Vector3f skyColour) {
+        this.skyColour = skyColour;
+    }
 }

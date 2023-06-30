@@ -1,5 +1,6 @@
 package shaders;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
 import entities.Camera;
@@ -39,4 +40,15 @@ public class SkyboxShader extends ShaderProgram {
         super.bindAttribute(0, "position");
     }
 
+    @Override
+    public void start() {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        super.start();
+    }
+
+    @Override
+    public void stop() {
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        super.stop();
+    }
 }

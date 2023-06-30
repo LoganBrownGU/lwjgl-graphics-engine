@@ -49,7 +49,7 @@ public class MainGameLoop {
         System.out.println(Maths.normalToTriangle(v1, v2, v3));
 
         Settings.updateSettings("assets/settings.cfg");
-        DisplayManager.createDisplay("test", 1920, 1080, true);
+        DisplayManager.createDisplay("test", 1920, 1080, false);
         Loader loader = new Loader();
         TextMaster.init(loader);
         FontType font = new FontType(loader.loadTexture("assets/fonts/arial.png"), new File("assets/fonts/arial.fnt"));
@@ -95,7 +95,7 @@ public class MainGameLoop {
         GUIMaster.setFont(loader, "assets/fonts/arial");
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 600f, 100, 3f));
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 1000f, 1000, 3f));
 
         Mouse.setGrabbed(true);
 
