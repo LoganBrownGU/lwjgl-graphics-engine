@@ -25,9 +25,9 @@ import java.util.Vector;
 
 public class Loader {
 
-    private List<Integer> vaos = new ArrayList<Integer>();
-    private List<Integer> vbos = new ArrayList<Integer>();
-    private List<Integer> textures = new ArrayList<Integer>();
+    private final List<Integer> vaos = new ArrayList<Integer>();
+    private final List<Integer> vbos = new ArrayList<Integer>();
+    private final List<Integer> textures = new ArrayList<Integer>();
 
     public int loadCubeMap(String[] textureFiles) {
         int texID = GL11.glGenTextures();
@@ -169,8 +169,7 @@ public class Loader {
         return buffer;
     }
 
-    public Terrain loadHeightMap(String path, String texturePath, float size, float maxHeight, float textureScale) {
-        float[][] data = FileHandler.readPixels(path);
+    public RawModel generateTerrainFromHeights(float[][] data, float size, float maxHeight, float textureScale) {
         int height = data.length;
         int width = data[0].length;
         float spacing = size / Math.max(width, height);
@@ -236,12 +235,22 @@ public class Loader {
             normalsArray[i*3 + 2] = normals[i].z;
         }
 
+        return loadToVAO(vertices, textures, normalsArray, indicesArray);
+    }
+
+    public Terrain loadHeightMap(String path, String texturePath, float size, float maxHeight, float textureScale) {
+        float[][] data = FileHandler.readPixels(path);
+        RawModel rawModel = generateTerrainFromHeights(data, size, maxHeight, textureScale);
+        int height = data.length;
+        int width = data[0].length;
+        float spacing = size / Math.max(width, height);
+
         float[][] heights = new float[height][width];
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                 heights[i][j] = data[i][j] * maxHeight - maxHeight / 2;
 
-        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), loadToVAO(vertices, textures, normalsArray, indicesArray), spacing, heights);
+        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), rawModel, spacing, heights);
 
         terrain.setX(-width * spacing / 2);
         terrain.setZ(-height * spacing / 2);

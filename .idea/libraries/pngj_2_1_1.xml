@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="pngj-2.1.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../pngj-2.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LIBRARIES/pngj-2.1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
