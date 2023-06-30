@@ -99,6 +99,26 @@ public class MasterRenderer {
         entities.clear();
     }
 
+    public void render(Terrain terrain, ArrayList<Light> lights, Camera camera) {
+        prepare();
+
+        if (skyboxRenderer != null)
+            skyboxRenderer.render(camera);
+
+        shader.start();
+        prepareShader(shader, lights, camera);
+        entityRenderer.render(entities);
+        shader.stop();
+
+        terrainShader.start();
+        prepareShader(terrainShader, lights, camera);
+        terrainRenderer.render(terrain);
+        terrainShader.stop();
+
+        entities.clear();
+    }
+
+
     public void processEntity(Entity entity) {
         TexturedModel entityModel = entity.getModel();
         List<Entity> batch = entities.get(entityModel);
