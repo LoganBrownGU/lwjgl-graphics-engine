@@ -76,7 +76,8 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
         PlayerCamera camera = new PlayerCamera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
-        MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/sea", camera);
+        //MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/sea", camera);
+        MasterRenderer renderer = new MasterRenderer(camera);
         renderer.enableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);

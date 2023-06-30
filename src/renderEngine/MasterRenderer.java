@@ -24,7 +24,7 @@ public class MasterRenderer {
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 2000;
 
-    private Camera camera;
+    private final Camera camera;
 
     private Matrix4f projectionMatrix;
     private final StaticShader shader;
@@ -32,8 +32,8 @@ public class MasterRenderer {
     private Vector3f skyColour = new Vector3f(.8f, .8f, .9f);
     private boolean fogEnabled = true;
     private final SkyboxRenderer skyboxRenderer;
-    private TerrainRenderer terrainRenderer;
-    private TerrainShader terrainShader;
+    private final TerrainRenderer terrainRenderer;
+    private final TerrainShader terrainShader;
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
 
@@ -47,6 +47,19 @@ public class MasterRenderer {
 
         this.entityRenderer = new EntityRenderer(shader, projectionMatrix);
         this.skyboxRenderer = new SkyboxRenderer(new Loader(), projectionMatrix, skyboxPath);
+        this.terrainRenderer = new TerrainRenderer(this.terrainShader, this.projectionMatrix);
+    }
+
+    public MasterRenderer(Camera camera) {
+        this.shader = new StaticShader();
+        this.terrainShader = new TerrainShader();
+
+        this.camera = camera;
+        enableCulling();
+        createProjectionMatrix();
+
+        this.entityRenderer = new EntityRenderer(shader, projectionMatrix);
+        this.skyboxRenderer = null;
         this.terrainRenderer = new TerrainRenderer(this.terrainShader, this.projectionMatrix);
     }
 
@@ -70,7 +83,8 @@ public class MasterRenderer {
     public void render(List<Terrain> terrains, ArrayList<Light> lights, Camera camera) {
         prepare();
 
-        skyboxRenderer.render(camera);
+        if (skyboxRenderer != null)
+            skyboxRenderer.render(camera);
 
         shader.start();
         prepareShader(shader, lights, camera);
