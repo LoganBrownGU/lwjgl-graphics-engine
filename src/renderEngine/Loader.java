@@ -5,7 +5,6 @@ import entities.Terrain;
 import models.RawModel;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -18,16 +17,12 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class Loader {
 
-    private final List<Integer> vaos = new ArrayList<Integer>();
-    private final List<Integer> vbos = new ArrayList<Integer>();
-    private final List<Integer> textures = new ArrayList<Integer>();
+    private final HashMap<Integer, ArrayList<Integer>> VAOs = new HashMap<>();
+    private final List<Integer> textures = new ArrayList<>();
 
     public int loadCubeMap(String[] textureFiles) {
         int texID = GL11.glGenTextures();
@@ -69,25 +64,25 @@ public class Loader {
 
     public int loadToVAO(float[] positions, float[] textureCoords) {
         int vaoID = createVAO();
-        storeDataInAttributeList(0, 2, positions);
-        storeDataInAttributeList(1, 2, textureCoords);
+        storeDataInAttributeList(0, 2, positions, vaoID);
+        storeDataInAttributeList(1, 2, textureCoords, vaoID);
         unbindVAO();
         return vaoID;
     }
 
     public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
         int vaoID = createVAO();
-        bindIndicesBuffer(indices);
-        storeDataInAttributeList(0, 3, positions);
-        storeDataInAttributeList(1, 2, textureCoords);
-        storeDataInAttributeList(2, 3, normals);
+        bindIndicesBuffer(indices, vaoID);
+        storeDataInAttributeList(0, 3, positions, vaoID);
+        storeDataInAttributeList(1, 2, textureCoords, vaoID);
+        storeDataInAttributeList(2, 3, normals, vaoID);
         unbindVAO();
         return new RawModel(vaoID, indices.length);
     }
 
     public RawModel loadToVAO(float[] positions, int nDimensions) {
         int vaoID = createVAO();
-        this.storeDataInAttributeList(0, nDimensions, positions);
+        this.storeDataInAttributeList(0, nDimensions, positions, vaoID);
         unbindVAO();
         return new RawModel(vaoID, positions.length / 2);
     }
@@ -115,12 +110,13 @@ public class Loader {
     }
 
     public void cleanUp() {
-        for (int vao : vaos) {
+        for (int vao : VAOs.keySet()) {
             GL30.glDeleteVertexArrays(vao);
+
+            for (int vbo : VAOs.get(vao))
+                GL15.glDeleteBuffers(vbo);
         }
-        for (int vbo : vbos) {
-            GL15.glDeleteBuffers(vbo);
-        }
+
         for (int texture : textures) {
             GL11.glDeleteTextures(texture);
         }
@@ -128,14 +124,15 @@ public class Loader {
 
     private int createVAO() {
         int vaoID = GL30.glGenVertexArrays();
-        vaos.add(vaoID);
+        VAOs.put(vaoID, new ArrayList<>());
         GL30.glBindVertexArray(vaoID);
         return vaoID;
     }
 
-    public void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
+    public void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data, int vaoID) {
         int vboID = GL15.glGenBuffers();
-        vbos.add(vboID);
+        VAOs.get(vaoID).add(vboID);
+        System.out.println(vaoID + ": " + vboID);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
         FloatBuffer buffer = storeDataInFloatBuffer(data);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
@@ -147,9 +144,9 @@ public class Loader {
         GL30.glBindVertexArray(0);
     }
 
-    private void bindIndicesBuffer(int[] indices) {
+    private void bindIndicesBuffer(int[] indices, int vaoID) {
         int vboID = GL15.glGenBuffers();
-        vbos.add(vboID);
+        VAOs.get(vaoID).add(vboID);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
         IntBuffer buffer = storeDataInIntBuffer(indices);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
@@ -265,5 +262,9 @@ public class Loader {
         terrain.setX(-width * spacing / 2);
         terrain.setZ(-height * spacing / 2);
         return terrain;
+    }
+
+    public ArrayList<Integer> getVBOs(int vaoID) {
+        return VAOs.get(vaoID);
     }
 }
