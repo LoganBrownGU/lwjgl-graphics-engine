@@ -17,7 +17,7 @@ public class Camera {
     public void move(Matrix4f projectionMatrix) {
         Matrix4f viewMatrix = Maths.createViewMatrix(this);
 
-        Vector3f direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() /2, (float) Display.getHeight() /2), projectionMatrix, viewMatrix);
+        Vector3f direction = Maths.screenCoordsToRay(new Vector2f((float) Display.getWidth() / 2, (float) Display.getHeight() / 2), projectionMatrix, viewMatrix);
         if (Keyboard.isKeyDown(Keyboard.KEY_W));
         else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             Vector3f w = new Vector3f(-direction.z, 0, direction.x);

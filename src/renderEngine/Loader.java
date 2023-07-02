@@ -133,7 +133,7 @@ public class Loader {
         return vaoID;
     }
 
-    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
+    public void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
@@ -169,18 +169,18 @@ public class Loader {
         return buffer;
     }
 
-    public RawModel generateTerrainFromHeights(float[][] data, float size, float maxHeight, float textureScale) {
+    public void vertexAttributesFromHeights(float[][] data, float[] verticesArray, float[] texturesArray, int[] indicesArray,
+                                             float[] normalsArray, float size, float maxHeight, float textureScale) {
+
         int height = data.length;
         int width = data[0].length;
         float spacing = size / Math.max(width, height);
 
         // storing vertices as vectors as well as array makes it easier to calculate normals
         ArrayList<Vector3f> vectorVertices = new ArrayList<>();
-        float[] vertices = new float[width * height * 3];
-        float[] textures = new float[width * height * 2];
         ArrayList<Integer> indices = new ArrayList<>();
-        Vector3f[] normals = new Vector3f[vertices.length / 3];
-        Arrays.fill(textures, 1);
+        Vector3f[] normals = new Vector3f[verticesArray.length / 3];
+        Arrays.fill(texturesArray, 1);
         for (int i = 0; i < normals.length; i++) normals[i] = new Vector3f();
 
         // put vertices into array
@@ -189,13 +189,13 @@ public class Loader {
                 int idx = (width * i + j) * 3;
                 Vector3f vertex = new Vector3f(j * spacing, data[i][j] * maxHeight - maxHeight / 2, i * spacing);
                 vectorVertices.add(vertex);
-                vertices[idx] = vertex.x;
-                vertices[idx + 1] = vertex.y;
-                vertices[idx + 2] = vertex.z;
+                verticesArray[idx] = vertex.x;
+                verticesArray[idx + 1] = vertex.y;
+                verticesArray[idx + 2] = vertex.z;
 
                 idx = (width * i + j) * 2;
-                textures[idx] = j * spacing * .005f * textureScale;
-                textures[idx+1] = i * spacing * .005f * textureScale;
+                texturesArray[idx] = j * spacing * .005f * textureScale;
+                texturesArray[idx+1] = i * spacing * .005f * textureScale;
             }
         }
 
@@ -223,17 +223,27 @@ public class Loader {
             }
         }
 
-        int[] indicesArray = new int[indices.size()];
         for (int i = 0; i < indicesArray.length; i++) indicesArray[i] = indices.get(i);
 
         for (Vector3f v : normals)
             v.normalise(null);
-        float[] normalsArray = new float[normals.length * 3];
         for (int i = 0; i < normals.length; i++) {
             normalsArray[i*3] = normals[i].x;
             normalsArray[i*3 + 1] = normals[i].y;
             normalsArray[i*3 + 2] = normals[i].z;
         }
+    }
+
+    public RawModel generateTerrainFromHeights(float[][] data, float size, float maxHeight, float textureScale) {
+        int height = data.length;
+        int width = data[0].length;
+
+        float[] vertices = new float[width * height * 3];
+        float[] textures = new float[width * height * 2];
+        float[] normalsArray = new float[vertices.length];
+        int[] indicesArray = new int[6 * (width - 1) * (height - 1)];
+
+        vertexAttributesFromHeights(data, vertices, textures, indicesArray, normalsArray, size, maxHeight, textureScale);
 
         return loadToVAO(vertices, textures, normalsArray, indicesArray);
     }

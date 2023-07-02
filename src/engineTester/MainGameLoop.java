@@ -2,6 +2,7 @@ package engineTester;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -75,17 +76,17 @@ public class MainGameLoop {
         lights.add(new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false));
         lights.add(new Light(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), true));
 
-        PlayerCamera camera = new PlayerCamera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
+        Camera camera = new Camera(new Vector3f(5,2,5), new Vector3f(0, 0, 0), 70);
         //MasterRenderer renderer = new MasterRenderer("assets/textures/skybox/sea", camera);
         MasterRenderer renderer = new MasterRenderer(camera);
-        renderer.enableFog();
+        renderer.disableFog();
 
         MousePicker mp = new MousePicker(renderer.getProjectionMatrix(), camera);
 
         ArrayList<GUITexture> guis = new ArrayList<>();
         float aspect = (float) Display.getWidth() / Display.getHeight();
         float guiSize = .03f;
-        guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
+        guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(.5f, .5f), new Vector2f(guiSize, guiSize * aspect)));
 
         GUIRenderer guiRenderer = new GUIRenderer(loader);
 
@@ -96,7 +97,10 @@ public class MainGameLoop {
         GUIMaster.setFont(loader, "assets/fonts/arial");
 
         ArrayList<Terrain> terrains = new ArrayList<>();
-        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/ground_texture.png", 1000f, 1000, 3f));
+        float[][] heights = new float[2048][2048];
+        for (float[] line : heights)
+            Arrays.fill(line, 0);
+        terrains.add(loader.loadHeightMap("assets/heightmaps/default.png", "assets/textures/grid.png", 500, 1000, 1));
 
         Mouse.setGrabbed(true);
 
@@ -104,7 +108,7 @@ public class MainGameLoop {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
             GUIMaster.checkEvents();
-            camera.move(renderer.getProjectionMatrix(), terrains.get(0));
+            camera.move(renderer.getProjectionMatrix());
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
             //fbo.bindFrameBuffer();
