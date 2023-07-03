@@ -1,6 +1,7 @@
 package entities;
 
 import models.RawModel;
+import renderEngine.Loader;
 import textures.ModelTexture;
 
 public class Terrain {
@@ -11,16 +12,26 @@ public class Terrain {
     private final RawModel model;
     private final ModelTexture texture;
     private final float[][] heights;
+    private final float[] vertices, normals, textures;
+    private final int[] indices;
 
-    public Terrain(int x, int z, ModelTexture texture, RawModel model, float spacing, float[][] heights) {
+    public Terrain(int x, int z, ModelTexture texture, float spacing, float[][] heights,
+                   float[] vertices, float[] normals, float[] textures, int[] indices, Loader loader) {
         this.texture = texture;
-        this.model = model;
+        this.model = loader.loadToVAO(vertices, textures, normals, indices);
         this.x = x * SIZE;
         this.z = z * SIZE;
         this.spacing = spacing;
         this.heights = heights;
+        this.vertices = vertices;
+        this.normals = normals;
+        this.textures = textures;
+        this.indices = indices;
     }
 
+    public void recalculateNormals(float[] vertices, int from, int length) {
+
+    }
 
     public float getX() {
         return x;
@@ -52,5 +63,21 @@ public class Terrain {
 
     public float[][] getHeights() {
         return heights;
+    }
+
+    public float[] getVertices() {
+        return vertices;
+    }
+
+    public float[] getNormals() {
+        return normals;
+    }
+
+    public float[] getTextures() {
+        return textures;
+    }
+
+    public int[] getIndices() {
+        return indices;
     }
 }

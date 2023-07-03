@@ -230,8 +230,8 @@ public class Loader {
             normalsArray[i*3 + 2] = normals[i].z;
         }
     }
-
-    public RawModel generateTerrainFromHeights(float[][] data, float size, float maxHeight, float textureScale) {
+    public Terrain loadHeightMap(String path, String texturePath, float size, float maxHeight, float textureScale) {
+        float[][] data = FileHandler.readPixels(path);
         int height = data.length;
         int width = data[0].length;
 
@@ -241,15 +241,6 @@ public class Loader {
         int[] indicesArray = new int[6 * (width - 1) * (height - 1)];
 
         vertexAttributesFromHeights(data, vertices, textures, indicesArray, normalsArray, size, maxHeight, textureScale);
-
-        return loadToVAO(vertices, textures, normalsArray, indicesArray);
-    }
-
-    public Terrain loadHeightMap(String path, String texturePath, float size, float maxHeight, float textureScale) {
-        float[][] data = FileHandler.readPixels(path);
-        RawModel rawModel = generateTerrainFromHeights(data, size, maxHeight, textureScale);
-        int height = data.length;
-        int width = data[0].length;
         float spacing = size / Math.max(width, height);
 
         float[][] heights = new float[height][width];
@@ -257,7 +248,8 @@ public class Loader {
             for (int j = 0; j < width; j++)
                 heights[i][j] = data[i][j] * maxHeight - maxHeight / 2;
 
-        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), rawModel, spacing, heights);
+        Terrain terrain = new Terrain(0, 0, new ModelTexture(loadTexture(texturePath), false), spacing, heights,
+                vertices, normalsArray, textures, indicesArray, this);
 
         terrain.setX(-width * spacing / 2);
         terrain.setZ(-height * spacing / 2);

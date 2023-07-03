@@ -101,10 +101,6 @@ public class Maths {
         Vector3f a = Vector3f.sub(v2, v1, null);
         Vector3f b = Vector3f.sub(v3, v1, null);
 
-        float i = a.y * b.z - a.z * b.y;
-        float j = a.x * b.z - a.z * b.x;
-        float k = a.x * b.y - a.y * b.x;
-
         return Vector3f.cross(a, b, null).normalise(null);
     }
 }
