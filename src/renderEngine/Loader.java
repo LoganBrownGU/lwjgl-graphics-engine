@@ -199,11 +199,11 @@ public class Loader {
         // create indices and calculate normals for each plane
         for (int i = 0; i < height - 1; i++) {
             for (int j = 0; j < width - 1; j++) {
+
                 int[] face = {i * width + j, (i+1) * width + j, i * width + j + 1};
                 indices.add(face[0]);
                 indices.add(face[1]);
                 indices.add(face[2]);
-
                 Vector3f normal = Maths.normalToTriangle(vectorVertices.get(face[0]), vectorVertices.get(face[1]), vectorVertices.get(face[2]));
                 Vector3f.add(normals[face[0]], normal, normals[face[0]]);
                 Vector3f.add(normals[face[1]], normal, normals[face[1]]);
