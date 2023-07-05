@@ -1,8 +1,6 @@
 package toolbox;
 
-import ar.com.hjg.pngj.ImageLineInt;
-import ar.com.hjg.pngj.PngReader;
-import ar.com.hjg.pngj.PngReaderInt;
+import ar.com.hjg.pngj.*;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,47 +60,6 @@ public class FileHandler {
         return children;
     }
 
-    /*public static float[][] readPixels(String path) {
-        PNGDecoder decoder;
-        BufferedInputStream stream;
-        int depth = 4;
-
-        try {
-            stream = new BufferedInputStream(new FileInputStream(path));
-            decoder = new PNGDecoder(stream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error reading " + path + " heightmap");
-        }
-
-        int width = decoder.getWidth();
-        int height = decoder.getHeight();
-        ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * depth);
-        try {
-            decoder.decode(buffer, width, PNGDecoder.Format.RGBA);
-            stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error reading " + path + " Could be bad format (should be 8bpc RGB)");
-        }
-
-        short[][] raw = new short[height][width];
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                raw[i][j] = (short) (buffer.get(i * width + j) & 0x00FF);// (float) Math.pow(2, 24);
-
-        for (short b : raw[0])
-            System.out.printf("%04X ", b);
-        System.out.println(height * width + " " + buffer.capacity());
-
-        float[][] data = new float[height][width];
-        for (int i = 0; i < raw.length; i++)
-            for (int j = 0; j < raw[i].length; j++)
-                data[i][j] = (float) raw[i][j] / 0xff;
-
-        return data;
-    }*/
-
     public static float[][] readPixels(String path) {
         PngReader decoder = new PngReaderInt(new File(path));
         float[][] data = new float[decoder.imgInfo.rows][decoder.imgInfo.cols];
@@ -116,5 +73,22 @@ public class FileHandler {
         }
 
         return data;
+    }
+
+    public static void writeHeightmap(String path, float[][] heights) {
+        ImageInfo info = new ImageInfo(heights[0].length, heights.length, 16, false, true, false);
+        PngWriter writer = new PngWriter(new File(path), info);
+
+        float max = (float) (Math.pow(2, 16) - 1);
+        for (float[] height : heights) {
+            ImageLineInt line = new ImageLineInt(info);
+            for (int j = 0; j < height.length; j++) {
+                int value = (int) (max * height[j]);
+                line.getScanline()[j] = value;
+            }
+            writer.writeRow(line);
+        }
+
+        writer.close();
     }
 }
